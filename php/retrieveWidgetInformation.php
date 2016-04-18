@@ -15,7 +15,7 @@
 			WHERE date_obtained IS NOT NULL
 			AND household_household_id = :household_household_id";
 		$retrieveRank = $dbh->prepare($sqlRetrieveRank);
-		$retrieveRank->bindParam(':household_household_id', 0, PDO::PARAM_INT);
+		$retrieveRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveRank->execute();
 		while ($rankInformation = $retrieveRank->fetch(PDO::FETCH_ASSOC)) {
 			echo $rankInformation['rank'];
@@ -32,7 +32,7 @@
 			GROUP BY username
 			ORDER BY score DESC";
 		$retrieveScore = $dbh->prepare($sqlRetrieveScore);
-		$retrieveScore->bindParam(':startOfMonth', date('o-m').'-01', PDO::PARAM_STR);
+		$retrieveScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveScore->execute();
 		while ($userScores = $retrieveScore->fetch(PDO::FETCH_ASSOC)) {
 			echo $userScores['username'].' '.$userScores['score'];
