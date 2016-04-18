@@ -18,7 +18,7 @@
 		$retrieveRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveRank->execute();
 		while ($rankInformation = $retrieveRank->fetch(PDO::FETCH_ASSOC)) {
-			echo $rankInformation['rank'];
+			echo $rankInformation['rank_rank_id'];
 		}
 		
 		
