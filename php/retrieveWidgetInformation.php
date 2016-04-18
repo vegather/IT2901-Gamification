@@ -7,7 +7,7 @@
 	
 	// Connection to the database
 	try {
-		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database';charset=utf-8', $username, $password);
+		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
 		
 		$sqlRetrieveRank = "SELECT MAX(rank_rank_id)
