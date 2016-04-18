@@ -15,7 +15,7 @@
 			WHERE date_obtained IS NOT NULL
 			AND household_household_id = :household_household_id";
 		$retrieveRank = $dbh->prepare($sqlRetrieveRank);
-		$retrieveRank->bindParam(':household_household_id', $insert HTML method['household_id'], PDO::PARAM_INT)
+		$retrieveRank->bindParam(':household_household_id', 0, PDO::PARAM_INT)
 		$retrieveRank->execute();
 		while ($rankInformation = $retrieveRank->fetch(PDO::FETCH_ASSOC)) {
 			echo $rankInformation['rank'];
