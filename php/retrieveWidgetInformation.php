@@ -9,17 +9,20 @@
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
+		$returnArray = array();
+		
 		// Notes: Functions like MAX or other such things in MySQL, needs to be defined with the AS if you're going to be able to retrieve them from result set.
-		$sqlRetrieveRank = "SELECT MAX(rank_rank_id) AS rank
+		$sqlRetrieveRank = "SELECT MAX(rank_rank_id)
 			FROM household_ranks
 			WHERE date_obtained IS NOT NULL
 			AND household_household_id = :household_household_id";
 		$retrieveRank = $dbh->prepare($sqlRetrieveRank);
 		$retrieveRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveRank->execute();
-		while ($rankInformation = $retrieveRank->fetch(PDO::FETCH_ASSOC)) {
-			echo $rankInformation['rank'].' ';
-		}
+		$rank = null;
+		$rankInformation = $retrieveRank->fetchAll(PDO::FETCH_ASSOC);
+		$rank = $rankInformation['rank'];
+		echo $jsonRank=json_encode($rankInformation);
 		
 		
 		$sqlRetrieveScore = "SELECT username, SUM(value) AS score
@@ -34,9 +37,8 @@
 		$retrieveScore = $dbh->prepare($sqlRetrieveScore);
 		$retrieveScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveScore->execute();
-		while ($userScores = $retrieveScore->fetch(PDO::FETCH_ASSOC)) {
-			echo $userScores['username'].' '.$userScores['score'].' ';
-		}
+		$userScores = $retrieveScore->fetchAll(PDO::FETCH_ASSOC);
+		echo $jsonUserScores = json_encode($userScores);
 		
 		
 		// Close connection
