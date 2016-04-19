@@ -10,7 +10,7 @@
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
 		
-		$sqlRetrieveRank = "SELECT MAX(rank_rank_id)
+		$sqlRetrieveRank = "SELECT MAX(rank_rank_id) as rank
 			FROM household_ranks
 			WHERE date_obtained IS NOT NULL
 			AND household_household_id = :household_household_id";
@@ -18,7 +18,7 @@
 		$retrieveRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveRank->execute();
 		while ($rankInformation = $retrieveRank->fetch(PDO::FETCH_ASSOC)) {
-			echo $rankInformation['MAX(rank_rank_id'].' ';
+			echo $rankInformation['rank'].' ';
 		}
 		
 		
@@ -35,6 +35,7 @@
 		$retrieveScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveScore->execute();
 		while ($userScores = $retrieveScore->fetch(PDO::FETCH_ASSOC)) {
+			echo $userScores['usernames'].' '.$userScores['score'].' ';
 		}
 		
 		
