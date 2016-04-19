@@ -18,7 +18,7 @@
 		$retrieveRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveRank->execute();
 		while ($rankInformation = $retrieveRank->fetch(PDO::FETCH_ASSOC)) {
-			echo $rankInformation['rank_rank_id'];
+			echo $rankInformation['MAX(rank_rank_id'].' ';
 		}
 		
 		
@@ -35,7 +35,6 @@
 		$retrieveScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveScore->execute();
 		while ($userScores = $retrieveScore->fetch(PDO::FETCH_ASSOC)) {
-			echo $userScores['username'].' '.$userScores['score'];
 		}
 		
 		
