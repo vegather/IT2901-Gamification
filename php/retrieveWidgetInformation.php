@@ -9,8 +9,8 @@
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
-		
-		$sqlRetrieveRank = "SELECT MAX(rank_rank_id) as rank
+		// Notes: Functions like MAX or other such things in MySQL, needs to be defined with the AS if you're going to be able to retrieve them from result set.
+		$sqlRetrieveRank = "SELECT MAX(rank_rank_id) AS rank
 			FROM household_ranks
 			WHERE date_obtained IS NOT NULL
 			AND household_household_id = :household_household_id";
@@ -35,7 +35,7 @@
 		$retrieveScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveScore->execute();
 		while ($userScores = $retrieveScore->fetch(PDO::FETCH_ASSOC)) {
-			echo $userScores['usernames'].' '.$userScores['score'].' ';
+			echo $userScores['username'].' '.$userScores['score'].' ';
 		}
 		
 		
