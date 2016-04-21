@@ -37,7 +37,6 @@
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetch(PDO::FETCH_ASSOC);
 		$currentRankRequirement = $householdRankInformation['requirement'];
-		echo $currentRankRequirement;
 		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
 		
 		
@@ -47,11 +46,9 @@
 			WHERE rank_id = :rank_id";
 		$retrieveNextRankRequirement = $dbh->prepare($sqlRetrieveNextRankRequirement);
 		$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
-		echo $householdHighestRank;
 		$retrieveNextRankRequirement->execute();
 		$nextRankRequirement = $retrieveNextRankRequirement->fetch(PDO::FETCH_ASSOC);
 		$nextRankRequirement = $nextRankRequirement['requirement'];
-		echo $nextRankRequirement;
 		
 		
 		//Fetches the household total score, which will be used for calculations in the script
@@ -65,14 +62,13 @@
 		$retrieveHouseholdTotalScore->execute();
 		$householdTotalScore = $retrieveHouseholdTotalScore->fetch(PDO::FETCH_ASSOC);
 		$householdTotalScore = $householdTotalScore['value'];
-		echo $householdTotalScore;
 		
 		
 		//Calculate the percentage done for the next rank for use in the widget
 		$denominator = $nextRankRequirement - $currentRankRequirement;
 		$numerator = $householdTotalScore - $currentRankRequirement;
 		$percentage = $numerator / $denominator;
-		echo $percentage;
+		echo 'Percent progress: '$percentage;
 		
 		
 		//Fetches the households monthly total score for the leaderboard on the widget
