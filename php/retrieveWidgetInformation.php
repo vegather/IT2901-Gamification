@@ -24,7 +24,7 @@
 		$retrieveHouseholdHighestRank = $dbh->prepare($sqlRetrieveHouseholdHighestRank);
 		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
-		$householdHighestRank = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC));
+		$householdHighestRank = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC);
 		$householdHighestRank = $rankInformation['rank'];
 		echo $householdHighestRank;
 
