@@ -14,6 +14,7 @@
 		$household_id = null;
 		
 		
+		
 		// Notes: Functions like MAX or other such things in MySQL, needs to be defined with the AS if you're going to be able to retrieve them from result set.
 		//Fetches the current rank the household is at, for use in the script
 		$sqlRetrieveHouseholdHighestRank = "SELECT MAX(rank_rank_id) AS rank
@@ -24,8 +25,8 @@
 		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
-		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
 		$householdHighestRank = $householdHighestRank['rank'];
+		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
 		echo $householdHighestRank;
 		
 		
