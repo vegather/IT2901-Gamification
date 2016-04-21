@@ -25,7 +25,7 @@
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
 		$householdHighestRank = $HouseholdHighestRank['rank'];
-		echo $rank;
+		echo $householdHighestRank;
 		
 		
 		//Fetches the rank information for the users current rank for the widget
@@ -33,7 +33,7 @@
 			FROM rank
 			WHERE rank_id = :rank_id";
 		$retrieveHouseholdRankInformation = $dbh->prepare($sqlRetrieveRankInformation);
-		$retrieveHouseholdRankInformation->bindParam(':rank_id', $rank, PDO::PARAM_INT);
+		$retrieveHouseholdRankInformation->bindParam(':rank_id', $householdHighestRank, PDO::PARAM_INT);
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
 		$currentRankRequirement = $householdRankInformation['requirement'];
@@ -46,8 +46,8 @@
 			FROM rank
 			WHERE rank_id = :rank_id";
 		$retrieveNextRankRequirement = $dbh->prepare($sqlRetrieveNextRankRequirement);
-		$retrieveNextRankRequirement->bindParam(':rank_id', ++$rank, PDO::PARAM_INT);
-		echo $rank;
+		$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
+		echo $householdHigestRank;
 		$retrieveNextRankRequirement->execute();
 		$nextRankRequirement = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
 		$nextRankRequirement = $nextRankRequirement['requirement'];
