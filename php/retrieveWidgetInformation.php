@@ -24,8 +24,8 @@
 		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
-		$householdHighestRank = $HouseholdHighestRank['rank'];
 		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
+		$householdHighestRank = $HouseholdHighestRank['rank'];
 		
 		
 		//Fetches the rank information for the users current rank for the widget
@@ -36,9 +36,10 @@
 		$retrieveHouseholdRankInformation->bindParam(':rank_id', $householdHighestRank, PDO::PARAM_INT);
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
+		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
 		$currentRankRequirement = $householdRankInformation['requirement'];
 		echo $jsonCurrentRankRequirement = json_encode($currentRankRequirement);
-		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
+		
 		
 		
 		//Fetches the requirement for the next rank for the household, which will be used for calculations in the script
