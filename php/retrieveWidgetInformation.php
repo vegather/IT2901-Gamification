@@ -26,7 +26,6 @@
 		$householdHighestRankResult = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
 		$householdHighestRank = $HouseholdHighestRankResult['rank'];
 		echo $householdHighestRank;
-		echo "test";
 		
 		
 		//Fetches the rank information for the users current rank for the widget
