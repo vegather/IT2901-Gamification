@@ -26,7 +26,6 @@
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC);
 		$householdHighestRank = $householdHighestRank['rank'];
-		echo $householdHighestRank;
 
 		
 		//Fetches the rank information for the users current rank for the widget
@@ -36,13 +35,10 @@
 		$retrieveHouseholdRankInformation = $dbh->prepare($sqlRetrieveHouseholdRankInformation);
 		$retrieveHouseholdRankInformation->bindParam(':rank_id', $householdHighestRank, PDO::PARAM_INT);
 		$retrieveHouseholdRankInformation->execute();
-		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
-		//Failure here to retrieve, retrieves only null
-		echo $householdRankInformation;
+		$householdRankInformation = $retrieveHouseholdRankInformation->fetch(PDO::FETCH_ASSOC);
 		$currentRankRequirement = $householdRankInformation['requirement'];
-		//Failure here aswell
-		echo $jsonCurrentRankRequirement = json_encode($currentRankRequirement);
-		
+		echo $currentRankRequirement;
+		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
 		
 		
 		//Fetches the requirement for the next rank for the household, which will be used for calculations in the script
@@ -51,13 +47,11 @@
 			WHERE rank_id = :rank_id";
 		$retrieveNextRankRequirement = $dbh->prepare($sqlRetrieveNextRankRequirement);
 		$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
-		//Failure here aswell
-		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
+		echo $householdHighestRank;
 		$retrieveNextRankRequirement->execute();
-		$nextRankRequirement = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
+		$nextRankRequirement = $retrieveNextRankRequirement->fetch(PDO::FETCH_ASSOC);
 		$nextRankRequirement = $nextRankRequirement['requirement'];
-		//Failure here aswell
-		echo $jsonNextRankRequirement = json_encode($nextRankRequirement);
+		echo $nextRankRequirement;
 		
 		
 		//Fetches the household total score, which will be used for calculations in the script
@@ -69,16 +63,16 @@
 		$retrieveHouseholdTotalScore->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdTotalScore->bindParam(':score_type_score_type_id', $score_type_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdTotalScore->execute();
-		$householdTotalScore = $retrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
-		echo $jsonHouseholdTotalScore = json_encode($householdTotalScore);
+		$householdTotalScore = $retrieveHouseholdTotalScore->fetch(PDO::FETCH_ASSOC);
 		$householdTotalScore = $householdTotalScore['value'];
+		echo $householdTotalScore;
 		
 		
 		//Calculate the percentage done for the next rank for use in the widget
 		$denominator = $nextRankRequirement - $currentRankRequirement;
 		$numerator = $householdTotalScore - $currentRankRequirement;
 		$percentage = $numerator / $denominator;
-		echo $jsonPercentage =  json_encode($percentage);
+		echo $percentage;
 		
 		
 		//Fetches the households monthly total score for the leaderboard on the widget
