@@ -23,8 +23,8 @@
 		$retrieveHouseholdHighestRank = $dbh->prepare($sqlRetrieveHouseholdHighestRank);
 		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
-		$householdHighestRankResult = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
-		$householdHighestRank = $HouseholdHighestRankResult['rank'];
+		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
+		$householdHighestRank = $HouseholdHighestRank['rank'];
 		echo "test";
 		echo $householdHighestRank;
 		
@@ -36,10 +36,10 @@
 		$retrieveHouseholdRankInformation = $dbh->prepare($sqlRetrieveRankInformation);
 		$retrieveHouseholdRankInformation->bindParam(':rank_id', $householdHighestRank, PDO::PARAM_INT);
 		$retrieveHouseholdRankInformation->execute();
-		$householdRankInformationResult = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
-		$currentRankRequirement = $householdRankInformationResult['requirement'];
+		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
+		$currentRankRequirement = $householdRankInformation['requirement'];
 		echo $currentRankRequirement;
-		echo $jsonHouseholdRankInformation = json_encode($householdRankInformationResult);
+		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
 		
 		
 		//Fetches the requirement for the next rank for the household, which will be used for calculations in the script
@@ -50,8 +50,8 @@
 		$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
 		echo $householdHigestRank;
 		$retrieveNextRankRequirement->execute();
-		$nextRankRequirementResult = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
-		$nextRankRequirement = $nextRankRequirementResult['requirement'];
+		$nextRankRequirement = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
+		$nextRankRequirement = $nextRankRequirement['requirement'];
 		echo $nextRankRequirement;
 		
 		
@@ -64,8 +64,8 @@
 		$retrieveHouseholdTotalScore->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdTotalScore->bindParam(':score_type_score_type_id', $score_type_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdTotalScore->execute();
-		$householdTotalScoreResult = $retrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
-		$householdTotalScore = $householdTotalScoreResult['value'];
+		$householdTotalScore = $retrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
+		$householdTotalScore = $householdTotalScore['value'];
 		echo $householdTotalScore;
 		
 		
@@ -89,8 +89,8 @@
 		$retrieveHouseholdsMonthScore = $dbh->prepare($sqlRetrieveHouseholdsMonthScore);
 		$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveHouseholdsMonthScore->execute();
-		$householdsMonthScoreResult = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
-		echo $jsonHouseholdsMonthScore = json_encode($householdsMonthScoreResult);
+		$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
+		echo $jsonHouseholdsMonthScore = json_encode($householdsMonthScore);
 		
 		
 		// Close connection
