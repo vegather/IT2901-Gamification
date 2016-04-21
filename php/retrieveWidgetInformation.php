@@ -25,8 +25,7 @@
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
 		$householdHighestRank = $HouseholdHighestRank['rank'];
-		echo "test";
-		echo $householdHighestRank;
+		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
 		
 		
 		//Fetches the rank information for the users current rank for the widget
@@ -38,7 +37,7 @@
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
 		$currentRankRequirement = $householdRankInformation['requirement'];
-		echo $currentRankRequirement;
+		echo $jsonCurrentRankRequirement = json_encode($currentRankRequirement);
 		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
 		
 		
@@ -48,11 +47,11 @@
 			WHERE rank_id = :rank_id";
 		$retrieveNextRankRequirement = $dbh->prepare($sqlRetrieveNextRankRequirement);
 		$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
-		echo $householdHigestRank;
+		echo $jsonHouseholdHighestRank = json_encode($householdHigestRank);
 		$retrieveNextRankRequirement->execute();
 		$nextRankRequirement = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
 		$nextRankRequirement = $nextRankRequirement['requirement'];
-		echo $nextRankRequirement;
+		echo $jsonNextRankRequirement = json_encode($nextRankRequirement);
 		
 		
 		//Fetches the household total score, which will be used for calculations in the script
@@ -66,14 +65,14 @@
 		$retrieveHouseholdTotalScore->execute();
 		$householdTotalScore = $retrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
 		$householdTotalScore = $householdTotalScore['value'];
-		echo $householdTotalScore;
+		echo $jsonHouseholdTotalScore = json_encode($householdTotalScore);
 		
 		
 		//Calculate the percentage done for the next rank for use in the widget
 		$denominator = $nextRankRequirement - $currentRankRequirement;
 		$numerator = $householdTotalScore - $currentRankRequirement;
 		$percentage = $numerator / $denominator;
-		echo $percentage;
+		echo $jsonPercentage =  json_encode($percentage);
 		
 		
 		//Fetches the households monthly total score for the leaderboard on the widget
