@@ -25,6 +25,7 @@
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRankResult = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
 		$householdHighestRank = $HouseholdHighestRankResult['rank'];
+		echo "test";
 		echo $householdHighestRank;
 		
 		
@@ -50,7 +51,7 @@
 		echo $householdHigestRank;
 		$retrieveNextRankRequirement->execute();
 		$nextRankRequirementResult = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
-		$nextRankRequirement = $nextRankRequirementResult'requirement'];
+		$nextRankRequirement = $nextRankRequirementResult['requirement'];
 		echo $nextRankRequirement;
 		
 		
