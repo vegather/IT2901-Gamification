@@ -24,14 +24,10 @@
 		$retrieveHouseholdHighestRank = $dbh->prepare($sqlRetrieveHouseholdHighestRank);
 		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
-		while ($rankInformation = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC)) {
-			echo $rankInformation['rank'].' Fungerer';
-			$householdHighestRank = $rankInformation['rank'];
-		}
-		$test= $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
-		echo $jsonHouseholdHighestRank = json_encode($test);
+		$householdHighestRank = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC));
+		$householdHighestRank = $rankInformation['rank'];
+		echo $householdHighestRank;
 
-		
 		
 		//Fetches the rank information for the users current rank for the widget
 		$sqlRetrieveHouseholdRankInformation = "SELECT  rank_id, rank_name, rank_image, requirement
@@ -42,7 +38,7 @@
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
 		//Failure here to retrieve, retrieves only null
-		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
+		echo $householdRankInformation;
 		$currentRankRequirement = $householdRankInformation['requirement'];
 		//Failure here aswell
 		echo $jsonCurrentRankRequirement = json_encode($currentRankRequirement);
