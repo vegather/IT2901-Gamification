@@ -12,6 +12,7 @@
 		
 		//TODO Write code to put household_id into the variable below from the clientside.
 		$household_id = null;
+		$householdHighestRank = null;
 		
 		
 		// Notes: Functions like MAX or other such things in MySQL, needs to be defined with the AS if you're going to be able to retrieve them from result set.
@@ -25,8 +26,11 @@
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
 		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
-		$householdHighestRank = $householdHighestRank['rank'];
-		echo $householdHighestRank;
+		while ($rankInformation = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC)) {
+			echo $rankInformation['rank'].' Fungerer';
+			$householdHighestRank = $rankInformation['rank'];
+		}
+
 		
 		
 		//Fetches the rank information for the users current rank for the widget
@@ -37,8 +41,10 @@
 		$retrieveHouseholdRankInformation->bindParam(':rank_id', $householdHighestRank, PDO::PARAM_INT);
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
+		//Failure here to retrieve, retrieves only null
 		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
 		$currentRankRequirement = $householdRankInformation['requirement'];
+		//Failure here aswell
 		echo $jsonCurrentRankRequirement = json_encode($currentRankRequirement);
 		
 		
@@ -49,10 +55,12 @@
 			WHERE rank_id = :rank_id";
 		$retrieveNextRankRequirement = $dbh->prepare($sqlRetrieveNextRankRequirement);
 		$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
+		//Failure here aswell
 		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
 		$retrieveNextRankRequirement->execute();
 		$nextRankRequirement = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
 		$nextRankRequirement = $nextRankRequirement['requirement'];
+		//Failure here aswell
 		echo $jsonNextRankRequirement = json_encode($nextRankRequirement);
 		
 		
