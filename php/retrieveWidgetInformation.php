@@ -24,7 +24,8 @@
 		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
-		$householdHighestRank = $HouseholdHighestRank['rank'];
+		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
+		$householdHighestRank = $householdHighestRank['rank'];
 		echo $householdHighestRank;
 		
 		
