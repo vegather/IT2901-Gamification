@@ -28,6 +28,8 @@
 			echo $rankInformation['rank'].' Fungerer';
 			$householdHighestRank = $rankInformation['rank'];
 		}
+		$test= $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
+		echo $jsonHouseholdHighestRank = json_encode($test);
 
 		
 		
