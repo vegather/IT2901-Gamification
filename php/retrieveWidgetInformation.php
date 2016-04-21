@@ -68,7 +68,7 @@
 		$denominator = $nextRankRequirement - $currentRankRequirement;
 		$numerator = $householdTotalScore - $currentRankRequirement;
 		$percentage = $numerator / $denominator;
-		echo 'Percent progress: '$percentage;
+		echo 'Percent progress: '.$percentage;
 		
 		
 		//Fetches the households monthly total score for the leaderboard on the widget
