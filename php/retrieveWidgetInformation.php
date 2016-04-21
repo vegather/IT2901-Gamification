@@ -14,7 +14,6 @@
 		$household_id = null;
 		
 		
-		
 		// Notes: Functions like MAX or other such things in MySQL, needs to be defined with the AS if you're going to be able to retrieve them from result set.
 		//Fetches the current rank the household is at, for use in the script
 		$sqlRetrieveHouseholdHighestRank = "SELECT MAX(rank_rank_id) AS rank
@@ -25,8 +24,8 @@
 		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetchAll(PDO::FETCH_ASSOC);
-		$householdHighestRank = $householdHighestRank['rank'];
 		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
+		$householdHighestRank = $householdHighestRank['rank'];
 		echo $householdHighestRank;
 		
 		
@@ -34,7 +33,7 @@
 		$sqlRetrieveHouseholdRankInformation = "SELECT  rank_id, rank_name, rank_image, requirement
 			FROM rank
 			WHERE rank_id = :rank_id";
-		$retrieveHouseholdRankInformation = $dbh->prepare($sqlRetrieveRankInformation);
+		$retrieveHouseholdRankInformation = $dbh->prepare($sqlRetrieveHouseholdRankInformation);
 		$retrieveHouseholdRankInformation->bindParam(':rank_id', $householdHighestRank, PDO::PARAM_INT);
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetchAll(PDO::FETCH_ASSOC);
@@ -50,7 +49,7 @@
 			WHERE rank_id = :rank_id";
 		$retrieveNextRankRequirement = $dbh->prepare($sqlRetrieveNextRankRequirement);
 		$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
-		echo $jsonHouseholdHighestRank = json_encode($householdHigestRank);
+		echo $jsonHouseholdHighestRank = json_encode($householdHighestRank);
 		$retrieveNextRankRequirement->execute();
 		$nextRankRequirement = $retrieveNextRankRequirement->fetchAll(PDO::FETCH_ASSOC);
 		$nextRankRequirement = $nextRankRequirement['requirement'];
@@ -67,8 +66,8 @@
 		$retrieveHouseholdTotalScore->bindParam(':score_type_score_type_id', $score_type_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdTotalScore->execute();
 		$householdTotalScore = $retrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
-		$householdTotalScore = $householdTotalScore['value'];
 		echo $jsonHouseholdTotalScore = json_encode($householdTotalScore);
+		$householdTotalScore = $householdTotalScore['value'];
 		
 		
 		//Calculate the percentage done for the next rank for use in the widget
