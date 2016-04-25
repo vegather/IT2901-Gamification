@@ -10,10 +10,13 @@
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
 		
-		if (isset($_GET["household_id"])) {
-			//do something
+		if (isset($_GET["start_date"], $_GET["end_date"])) {
+			$sqlRetrieveLeaderboards = "";
+			$retrieveLeaderboards = dbh->prepare($sqlRetrieveLeaderboards);
+			$retrieveLeaderboards->bindParam(':startDate', $_GET["start_date"], PDO::PARAM_STR);
+			$retrieveLeaderboards->bindParam(':endDate', $_GET["end_date"], PDO::PARAM_STR);
 		} else {
-			echo "Household ID must be set!";
+			echo "Need the start date and end date to retrieve leaderboards!";
 		}
 		
 		
