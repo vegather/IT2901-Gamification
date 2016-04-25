@@ -11,7 +11,7 @@
 				
 		
 		//TODO Write code to put household_id into the variable below from the clientside.
-		$household_id = null;
+		$household_id = $_GET["household_id"];
 		$householdHighestRank = null;
 		$resultArray = array();
 		
@@ -23,7 +23,7 @@
 			WHERE date_obtained IS NOT NULL
 			AND household_household_id = :household_household_id";
 		$retrieveHouseholdHighestRank = $dbh->prepare($sqlRetrieveHouseholdHighestRank);
-		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
+		$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
 		$retrieveHouseholdHighestRank->execute();
 		$householdHighestRank = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC);
 		$householdHighestRank = $householdHighestRank['rank'];
@@ -61,7 +61,7 @@
 			WHERE score_type_score_type_id = :score_type_score_type_id
 			AND household_household_id = :household_household_id";
 		$retrieveHouseholdTotalScore = $dbh->prepare($sqlRetrieveHouseholdTotalScore);
-		$retrieveHouseholdTotalScore->bindParam(':household_household_id', $household_id = 0, PDO::PARAM_INT);
+		$retrieveHouseholdTotalScore->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
 		$retrieveHouseholdTotalScore->bindParam(':score_type_score_type_id', $score_type_id = 0, PDO::PARAM_INT);
 		$retrieveHouseholdTotalScore->execute();
 		$householdTotalScore = $retrieveHouseholdTotalScore->fetch(PDO::FETCH_ASSOC);
