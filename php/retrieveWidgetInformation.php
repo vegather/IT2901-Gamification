@@ -13,6 +13,7 @@
 		//TODO Write code to put household_id into the variable below from the clientside.
 		$household_id = null;
 		$householdHighestRank = null;
+		$resultArray = array();
 		
 		
 		// Notes: Functions like MAX or other such things in MySQL, needs to be defined with the AS if you're going to be able to retrieve them from result set.
@@ -29,7 +30,7 @@
 
 		
 		//Fetches the rank information for the users current rank for the widget
-		$sqlRetrieveHouseholdRankInformation = "SELECT  rank_id, rank_name, rank_image, requirement
+		$sqlRetrieveHouseholdRankInformation = "SELECT *
 			FROM rank
 			WHERE rank_id = :rank_id";
 		$retrieveHouseholdRankInformation = $dbh->prepare($sqlRetrieveHouseholdRankInformation);
@@ -37,7 +38,7 @@
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetch(PDO::FETCH_ASSOC);
 		$currentRankRequirement = $householdRankInformation['requirement'];
-		echo $jsonHouseholdRankInformation = json_encode($householdRankInformation);
+		array_push($resultArray, $householdRankInformation);
 		
 		
 		//Fetches the requirement for the next rank for the household, which will be used for calculations in the script
@@ -68,16 +69,14 @@
 		$denominator = $nextRankRequirement - $currentRankRequirement;
 		$numerator = $householdTotalScore - $currentRankRequirement;
 		$percentage = $numerator / $denominator;
-		echo 'Percent progress: '.$percentage;
+		$resultArray["percentage"] = $percentage;
 		
 		
 		//Fetches the households monthly total score for the leaderboard on the widget
 		$sqlRetrieveHouseholdsMonthScore = "SELECT username, SUM(value) AS score
 			FROM household AS HH
 			INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
-			WHERE DATE
-			BETWEEN :startOfMonth
-			AND CURDATE()
+			WHERE date>:startOfMonth
 			AND NOT score_type_score_type_id = 0
 			GROUP BY username
 			ORDER BY score DESC";
@@ -85,8 +84,9 @@
 		$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveHouseholdsMonthScore->execute();
 		$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
-		echo $jsonHouseholdsMonthScore = json_encode($householdsMonthScore);
+		$resultArray["householdsMonthScore"] = array($householdsMonthScore);
 		
+		echo $jsonResultArray = json_encode($resultArray);
 		
 		// Close connection
 		$dbh = null;
