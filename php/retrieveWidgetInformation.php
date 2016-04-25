@@ -38,7 +38,10 @@
 		$retrieveHouseholdRankInformation->execute();
 		$householdRankInformation = $retrieveHouseholdRankInformation->fetch(PDO::FETCH_ASSOC);
 		$currentRankRequirement = $householdRankInformation['requirement'];
-		array_push($resultArray, $householdRankInformation);
+		$resultArray["rank_id"] = $householdRankInformation['rank_id'];
+		$resultArray["rank_name"] = $householdRankInformation['rank_name'];
+		$resultArray["requirement"] = $householdRankInformation['requirement'];
+		$resultArray["rank_image"] = $householdRankInformation['rank_image'];
 		
 		
 		//Fetches the requirement for the next rank for the household, which will be used for calculations in the script
@@ -84,7 +87,7 @@
 		$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
 		$retrieveHouseholdsMonthScore->execute();
 		$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
-		$resultArray["householdsMonthScore"] = array($householdsMonthScore);
+		$resultArray["householdsMonthScore"] = $householdsMonthScore;
 		
 		echo $jsonResultArray = json_encode($resultArray);
 		
