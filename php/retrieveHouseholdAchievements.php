@@ -1,16 +1,16 @@
 <?php
-	// Connection info for database
+	//Connection info for database
 	$hostname = 'localhost';
 	$username = 'root'; //Temporarily for testing purposes, create a MySQL user for this later
-	$password = 'cossmic'; // same as above
+	$password = 'cossmic'; //same as above
 	$database = 'CoSSMunity';
 	
-	// Connection to the database
+	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
 		
-		if (isset($_GET["household_id"])) {
+		if (!empty($_GET["household_id"])) {
 			//do something
 		} else {
 			echo "Household ID must be set!";
