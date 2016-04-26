@@ -35,9 +35,6 @@
 				$retrieveLeaderboard->bindValue(":date", $date = "", PDO::PARAM_STR);
 				echo "Parameters should have been binded!";
 				echo $sqlRetrieveLeaderboard;
-				$retrieveLeaderboard->execute();
-				$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
-				echo $jsonLeaderboard = json_encode($leaderboard);
 			}
 			elseif($_GET["leaderboard_mode"] === "timed") {
 				echo "Enters timed!";
@@ -46,14 +43,14 @@
 					$retrieveLeaderboard->bindValue(":date", $date = "AND HS.date BETWEEN '".$_GET["start_date"]."' AND '".$_GET["end_date"]."'" , PDO::PARAM_STR);
 					echo "Parameters should have been binded!";
 					echo $sqlRetrieveLeaderboard;
-					$retrieveLeaderboard->execute();
-					$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
-					echo $jsonLeaderboard = json_encode($leaderboard);
 				} else {
 					echo "Need the date to and from to retrieve leaderboards from a timespan!";
 				}
 			}
 			echo $sqlRetrieveLeaderboard;
+			$retrieveLeaderboard->execute();
+			$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
+			echo $jsonLeaderboard = json_encode($leaderboard);
 		} else {
 			echo "Need the leaderboard_mode to retrieve leaderboards!";
 		}
