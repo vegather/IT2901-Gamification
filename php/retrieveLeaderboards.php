@@ -55,7 +55,7 @@
 						";
 					$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
 					$retrieveLeaderboard->bindParam(":startDate", $_GET["start_date"], PDO::PARAM_STR);
-					$retrieveLeaderboard->bindParam(":endDate",  ,$_GET["end_date"] PDO::PARAM_STR);
+					$retrieveLeaderboard->bindParam(":endDate",  $_GET["end_date"] PDO::PARAM_STR);
 					echo "Parameters should have been binded!";
 					echo $sqlRetrieveLeaderboard;
 				} else {
