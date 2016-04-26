@@ -33,7 +33,7 @@
 				echo "Enters total!";
 				$retrieveLeaderboard->bindParam(":scoreType", $scoreType = "", PDO::PARAM_STR);
 				$retrieveLeaderboard->bindParam(":date", $date = "", PDO::PARAM_STR);
-				echo "Parameters should have been binded!"
+				echo "Parameters should have been binded!";
 				echo $sqlRetrieveLeaderboard;
 			}
 			elseif($_GET["leaderboard_mode"] === "timed") {
