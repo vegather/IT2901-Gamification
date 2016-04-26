@@ -31,16 +31,16 @@
 			$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
 			if($_GET["leaderboard_mode"] === "total") {
 				echo "Enters total!";
-				$retrieveLeaderboard->bindParam(":scoreType", $scoreType = "", PDO::PARAM_STR);
-				$retrieveLeaderboard->bindParam(":date", $date = "", PDO::PARAM_STR);
+				$retrieveLeaderboard->bindValue(":scoreType", $scoreType = "", PDO::PARAM_STR);
+				$retrieveLeaderboard->bindValue(":date", $date = "", PDO::PARAM_STR);
 				echo "Parameters should have been binded!";
 				echo $sqlRetrieveLeaderboard;
 			}
 			elseif($_GET["leaderboard_mode"] === "timed") {
 				echo "Enters timed!";
 				if(!empty($_GET["start_date"]) && !empty($_GET["end_date"])) {
-					$retrieveLeaderboard->bindParam(":scoreType", $scoreType = "NOT", PDO::PARAM_STR);
-					$retrieveLeaderboard->bindParam(":date", $date = "AND HS.date BETWEEN '".$_GET["start_date"]."' AND '".$_GET["end_date"]."'" , PDO::PARAM_STR);
+					$retrieveLeaderboard->bindValue(":scoreType", $scoreType = "NOT", PDO::PARAM_STR);
+					$retrieveLeaderboard->bindValue(":date", $date = "AND HS.date BETWEEN '".$_GET["start_date"]."' AND '".$_GET["end_date"]."'" , PDO::PARAM_STR);
 					echo "Parameters should have been binded!";
 					echo $sqlRetrieveLeaderboard;
 				} else {
