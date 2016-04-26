@@ -34,7 +34,7 @@
 				$retrieveLeaderboard->bindParam(":date", $date = "", PDO::PARAM_STR);
 			}
 			elseif($_GET["leaderboard_mode"] = "timed") {
-				if(!empty($_GET["start_date"], $_GET["end_date"])) {
+				if(!empty($_GET["start_date"]) && !empty($_GET["end_date"])) {
 					$retrieveLeaderboard->bindParam(":scoreType", $scoreType = "NOT", PDO::PARAM_STR);
 					$retrieveLeaderboard->bindParam(":date", $date = "AND HS.date BETWEEN '".$_GET["start_date"]."' AND '".$_GET["end_date"]."'" , PDO::PARAM_STR);
 				} else {
