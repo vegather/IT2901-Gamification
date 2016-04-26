@@ -28,7 +28,7 @@
 					GROUP BY HH.household_id
 					ORDER BY HS.value DESC
 					";
-			$retrieveLeaderboard = dbh->prepare($sqlRetrieveLeaderboard);
+			$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
 			if($_GET["leaderboard_mode"] = "total") {
 				$retrieveLeaderboard->bindParam(":scoreType", $scoreType = "", PDO::PARAM_STR);
 				$retrieveLeaderboard->bindParam(":date", $date = "", PDO::PARAM_STR);
