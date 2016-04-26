@@ -13,9 +13,8 @@
 		//Check that leaderboard_mode has been set
 		if (!empty($_GET["leaderboard_mode"])) {
 			$sqlRetrieveLeaderboard = null;
-
+			//This will retrieve the leaderboard over total score with parameter leaderboard_mode = total
 			if($_GET["leaderboard_mode"] === "total") {
-				echo "Enters total!";
 				$sqlRetrieveLeaderboard = "
 					SELECT HH.username, R.rank_image, HS.value as score
 					FROM (
@@ -32,10 +31,9 @@
 					ORDER BY HS.value DESC
 					";
 				$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
-				echo $sqlRetrieveLeaderboard;
 			}
+			//This will retrieve the leaderboard over a set timespan with the parameters start_date and end_date in the format yyyy-mm-dd with parameter leaderboard_mode = timed
 			elseif($_GET["leaderboard_mode"] === "timed") {
-				echo "Enters timed!";
 				if(!empty($_GET["start_date"]) && !empty($_GET["end_date"])) {
 					$sqlRetrieveLeaderboard = "
 						SELECT HH.username, R.rank_image, SUM(HS.value) as score
@@ -56,8 +54,6 @@
 					$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
 					$retrieveLeaderboard->bindParam(":startDate", $_GET["start_date"], PDO::PARAM_STR);
 					$retrieveLeaderboard->bindParam(":endDate",  $_GET["end_date"], PDO::PARAM_STR);
-					echo "Parameters should have been binded!";
-					echo $sqlRetrieveLeaderboard;
 				} else {
 					echo "Need the start_date and end_date to retrieve leaderboards from a timespan!";
 				}
