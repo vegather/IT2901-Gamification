@@ -11,7 +11,7 @@
 				
 		
 		//Check if parameter has been set from clientside, in this case household_id
-		if (!empty($_GET["household_id"])) {
+		if (isset($_GET["household_id"])) {
 			$household_id = $_GET["household_id"];
 			$householdHighestRank = null;
 			$resultArray = array();
