@@ -60,7 +60,13 @@
 			}
 			$retrieveLeaderboard->execute();
 			$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
-			echo $jsonLeaderboard = json_encode($leaderboard);
+			$jsonLeaderboard = json_encode($leaderboard);
+			if (isset($_GET["callback"] && $_GET["callback"] === "refreshLeaderboard") {
+				$callback = $_GET["callback"];
+				echo $callback."(".$jsonLeaderboard.");";
+			} else {
+				echo $jsonLeaderboard;
+			}
 		} else {
 			echo "Need the leaderboard_mode to retrieve leaderboards!";
 		}
