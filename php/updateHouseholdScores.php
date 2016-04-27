@@ -19,8 +19,12 @@
 		
 		if (isset($_GET["household_id"])) {	
 			$sqlCheckIfHouseholdScoreExist = "
-			SELECT EXISTS(SELECT HS.score_type_score_type_id
-				FROM household_scores AS HS)
+			SELECT EXISTS
+				(SELECT HS.score_type_score_type_id
+				FROM household_scores AS HS
+				WHERE HS.household_household_id = :householdID
+				AND HS.score_type_score_type_id = :scoreTypeID
+				AND HS.date BETWEEN :start_date AND :endDate)
 			";
 		}
 
