@@ -10,7 +10,7 @@
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
 		
-		if (!empty($_GET["household_id"])) {
+		if (isset($_GET["household_id"])) {
 			$sqlRetrieveHouseholdAchievements = "
 			SELECT A.achievement_image, A.achievement_name, A.description, HA.achieved
 			FROM achievement as A
