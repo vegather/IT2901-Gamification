@@ -63,7 +63,7 @@
 			$jsonLeaderboard = json_encode($leaderboard);
 			if (isset($_GET["callback"]) && $_GET["callback"] === "refreshLeaderboard") {
 				$callback = $_GET["callback"];
-			echo $callback."({data:".$jsonLeaderboard."});";
+			echo $callback.'({"data":'.$jsonLeaderboard."});";
 			} else {
 				echo $jsonLeaderboard;
 			}
