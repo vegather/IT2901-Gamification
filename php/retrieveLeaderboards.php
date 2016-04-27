@@ -65,7 +65,7 @@
 				$callback = $_GET["callback"];
 				echo $callback."(".$jsonLeaderboard.");";
 			} else {
-				echo "Callback is not set!";
+				echo $jsonLeaderboard;
 			}
 		} else {
 			echo "Need the leaderboard_mode to retrieve leaderboards!";
