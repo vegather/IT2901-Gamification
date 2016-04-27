@@ -11,9 +11,20 @@
 		
 		
 		if (!empty($_GET["household_id"])) {
-			//do something
+			$sqlRetrieveHouseholdAchievements = "
+			SELECT A.achievement_image, A.achievement_name, A.description, HA.achieved
+			FROM achievement as A
+			INNER JOIN household_achievements AS HA ON A.achievement_id = HA.achievement_achievement_id
+			WHERE HA.household_household_id = :household_id
+			GROUP BY A.achievement_name
+			";
+			$retrieveHouseholdAchievements = $dbh->prepare($sqlRetrieveHouseholdAchievements);
+			$retrieveHouseholdAchievements->bindParam(":household_id", $_GET["household_id"], PDO::PARAM_STR);
+			$retrieveHouseholdAchievements->execute();
+			$householdAchievements = $retrieveHouseholdAchievements->fetchAll(PDO::FETCH_ASSOC);
+			echo $jsonHouseholdAchievements = json_encode($householdAchievements);
 		} else {
-			echo "Household ID must be set!";
+			echo "You need to set household_id to the household you want the achievements from!";
 		}
 		
 		
