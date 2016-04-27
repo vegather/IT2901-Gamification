@@ -61,7 +61,7 @@
 			$retrieveLeaderboard->execute();
 			$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
 			$jsonLeaderboard = json_encode($leaderboard);
-			if (isset($_GET["callback"] && $_GET["callback"] === "refreshLeaderboard") {
+			if (isset($_GET["callback"] && $_GET["callback"]) === "refreshLeaderboard") {
 				$callback = $_GET["callback"];
 				echo $callback."(".$jsonLeaderboard.");";
 			} else {
