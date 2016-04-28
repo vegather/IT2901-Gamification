@@ -22,7 +22,16 @@
 			$retrieveHouseholdAchievements->bindParam(":household_id", $_GET["household_id"], PDO::PARAM_STR);
 			$retrieveHouseholdAchievements->execute();
 			$householdAchievements = $retrieveHouseholdAchievements->fetchAll(PDO::FETCH_ASSOC);
-			echo $jsonHouseholdAchievements = json_encode($householdAchievements);
+			
+			$jsonHouseholdAchievements = json_encode($householdAchievements);
+			
+			if (isset($_GET["callback"])) {
+				$callback = $_GET["callback"];
+				echo $callback.'({"data":'.$jsonHouseholdAchievements.'});';
+			} else {
+				echo $jsonHouseholdAchievements;
+			}
+			
 		} else {
 			echo "You need to set household_id to the household you want the achievements from!";
 		}
