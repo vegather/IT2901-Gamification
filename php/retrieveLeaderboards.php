@@ -16,7 +16,7 @@
 			//This will retrieve the leaderboard over total score with parameter leaderboard_mode = total
 			if($_GET["leaderboard_mode"] === "total") {
 				$sqlRetrieveLeaderboard = "
-					SELECT HH.household_id, IFNULL(R.rank_image, '') as rank_image, HH.username, HS.value as score
+					SELECT HH.household_id, R.rank_image, HH.username, HS.value as score
 					FROM (
 						SELECT MAX(HR.rank_rank_id) AS householdMaxRank, HR.household_household_id
 						FROM household_ranks AS HR
@@ -36,7 +36,7 @@
 			elseif($_GET["leaderboard_mode"] === "timed") {
 				if(!empty($_GET["start_date"]) && !empty($_GET["end_date"])) {
 					$sqlRetrieveLeaderboard = "
-						SELECT HH.household_id, IFNULL(R.rank_image, '') as rank_image, HH.username, SUM(HS.value) as score
+						SELECT HH.household_id, R.rank_image, HH.username, SUM(HS.value) as score
 						FROM (
 							SELECT MAX(HR.rank_rank_id) AS householdMaxRank, HR.household_household_id
 							FROM household_ranks AS HR
@@ -60,13 +60,16 @@
 			}
 			$retrieveLeaderboard->execute();
 			$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
+			
 			$jsonLeaderboard = json_encode($leaderboard);
+			
 			if (isset($_GET["callback"])) {
 				$callback = $_GET["callback"];
 				echo $callback.'({"data":'.$jsonLeaderboard.'});';
 			} else {
 				echo $jsonLeaderboard;
 			}
+			
 		} else {
 			echo "Need the leaderboard_mode to retrieve leaderboards!";
 		}

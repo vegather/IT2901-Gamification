@@ -99,9 +99,18 @@
 			$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
 			$resultArray["householdsMonthScore"] = $householdsMonthScore;
 			
-			echo $jsonResultArray = json_encode($resultArray);
+			$jsonResultArray = json_encode($resultArray);
+			
+			if (isset($_GET["callback"])) {
+				$callback = $_GET["callback"];
+				echo $callback.'('.$jsonResultArray.');';
+			}
+			else {
+				echo $jsonResultArray;
+			}
+			
 		} else {
-			echo "Household ID must be set to retrieve widget information!";
+			echo "household_id must be set to retrieve widget information!";
 		}
 		
 		
