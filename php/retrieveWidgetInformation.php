@@ -94,7 +94,7 @@
 				ORDER BY score DESC
 				";
 			$retrieveHouseholdsMonthScore = $dbh->prepare($sqlRetrieveHouseholdsMonthScore);
-			$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('o-m').'-01', PDO::PARAM_STR);
+			$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('Y-m').'-01', PDO::PARAM_STR);
 			$retrieveHouseholdsMonthScore->execute();
 			$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
 			$resultArray["householdsMonthScore"] = $householdsMonthScore;

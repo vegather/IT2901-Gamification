@@ -13,10 +13,13 @@
 		//Check that leaderboard_mode has been set
 		if (!empty($_GET["leaderboard_mode"])) {
 			$sqlRetrieveLeaderboard = null;
+			$resultArray = array();
+			
+			
 			//This will retrieve the leaderboard over total score with parameter leaderboard_mode = total
 			if($_GET["leaderboard_mode"] === "total") {
 				$sqlRetrieveLeaderboard = "
-					SELECT HH.household_id, R.rank_image, HH.username, HS.value as score
+					SELECT HH.household_id, HH.email_hash, R.rank_image, HH.username, HS.value as score
 					FROM (
 						SELECT MAX(HR.rank_rank_id) AS householdMaxRank, HR.household_household_id
 						FROM household_ranks AS HR
@@ -28,7 +31,7 @@
 					INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
 					WHERE HS.score_type_score_type_id = 0
 					GROUP BY HH.household_id
-					ORDER BY HS.value DESC
+					ORDER BY score DESC
 					";
 				$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
 			}
@@ -36,7 +39,7 @@
 			elseif($_GET["leaderboard_mode"] === "timed") {
 				if(!empty($_GET["start_date"]) && !empty($_GET["end_date"])) {
 					$sqlRetrieveLeaderboard = "
-						SELECT HH.household_id, R.rank_image, HH.username, SUM(HS.value) as score
+						SELECT HH.household_id, HH.email_hash, R.rank_image, HH.username, SUM(HS.value) as score
 						FROM (
 							SELECT MAX(HR.rank_rank_id) AS householdMaxRank, HR.household_household_id
 							FROM household_ranks AS HR
@@ -49,7 +52,7 @@
 						WHERE NOT HS.score_type_score_type_id = 0
 						AND HS.date BETWEEN :startDate AND :endDate
 						GROUP BY HH.household_id
-						ORDER BY HS.value DESC
+						ORDER BY score DESC
 						";
 					$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
 					$retrieveLeaderboard->bindParam(":startDate", $_GET["start_date"], PDO::PARAM_STR);

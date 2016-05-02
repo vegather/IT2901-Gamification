@@ -14,9 +14,10 @@
 		
 		
 		//Check if parameters have been set and are not empty.
-		if (!empty($_GET["username"])) {
-			$username = $_GET["username"];
-			$household_id = null;
+		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email"])) {
+			$household_id = $_POST["household_id"];
+			$username = $_POST["username"];
+			$email_hash = $_POST["email"];
 			
 			
 			//Check to see if username is available
@@ -35,31 +36,20 @@
 			if !($usernameAvailability->num_rows>0) {
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
-					INSERT INTO household(username, residents, house_type, size, age, electric_heating, electric_car)
-					VALUES(:username, :residents, :house_type, :size, :age, :electric_heating, :electric_car)
+					INSERT INTO household(household_id, username, email_hash residents, house_type, size, age, electric_heating, electric_car)
+					VALUES(:household_id, :username, :email_hash, :residents, :house_type, :size, :age, :electric_heating, :electric_car)
 					";
 				$insertUser = $dbh->prepare($sqlInsertUser);
+				$insertUser->bindParam(':household_id', $household_id, PDO::PARAM_INT);
 				$insertUser->bindParam(':username', $username, PDO::PARAM_STR);
-				$insertUser->bindParam(':residents', $_GET["residents"], PDO::PARAM_INT);
-				$insertUser->bindParam(':house_type', $_GET["house_type"], PDO::PARAM_STR);
-				$insertUser->bindParam(':size', $_GET["size"], PDO::PARAM_INT);
-				$insertUser->bindParam(':age', $_GET["age"], PDO::PARAM_INT);
-				$insertUser->bindParam(':electric_heating', $_GET["electric_heating"], PDO::PARAM_BOOL);
-				$insertUser->bindParam(':electric_car', $_GET["electric_car"], PDO::PARAM_INT);
+				$insertUser->bindParam(':email_hash', $email_hash, PDO::PARAM_STR);
+				$insertUser->bindValue(':residents', getIfEmpty($_POST["residents"]), PDO::PARAM_INT);
+				$insertUser->bindValue(':house_type', getIfEmpty($_POST["house_type"]), PDO::PARAM_STR);
+				$insertUser->bindValue(':size', getIfEmpty($_POST["size"]), PDO::PARAM_INT);
+				$insertUser->bindValue(':age', getIfEmpty($_POST["age"]), PDO::PARAM_INT);
+				$insertUser->bindValue(':electric_heating', getIfEmpty($_POST["electric_heating"]), PDO::PARAM_BOOL);
+				$insertUser->bindValue(':electric_car', getIfEmpty($_POST["electric_car"]), PDO::PARAM_INT);
 				$insertUser->execute();
-				
-				
-				//Retrieves the created household_id from the database for use in the rest of the set up
-				$sqlRetrieveHouseholdID = "
-					SELECT household_id
-					FROM household
-					WHERE username = :username
-					";
-				$retrieveHouseholdID = dbh->prepare($sqlRetrieveHouseholdID);
-				$retrieveHouseholdID->bindParam(':username', $username, PDO::PARAM_STR);
-				$retrieveHouseholdID->execute();
-				$householdIDArray = $retrieveHouseholdID->fetch(PDO::FETCH_ASSOC);
-				$household_id = $householdIDArray['household_id'];
 				
 				
 				//Retrieves achievements that exists for use in set up
@@ -81,7 +71,7 @@
 				$insertHouseholdAchievements->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
 				$insertHouseholdAchievements->bindParam(':achievement_achievement_id', $achievement, PDO::PARAM_INT);
 				$insertHouseholdAchievements->bindParam(':achieved', $achieved = 0, PDO::PARAM_BOOL);
-				$insertHouseholdAchievements->bindParam(':date_achieved', $nullValue, PDO::PARAM_STR);
+				$insertHouseholdAchievements->bindValue(':date_achieved', $nullValue, PDO::PARAM_STR);
 				foreach($achievementsID as &$value) {
 					$achievement = $value;
 					$insertHouseholdAchievements->execute();
@@ -106,7 +96,7 @@
 				$insertHouseholdRanks = $dbh->prepare($sqlInsertHouseholdRanks);
 				$insertHouseholdRanks->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
 				$insertHouseholdRanks->bindParam(':rank_rank_id', $rank, PDO::PARAM_INT);
-				$insertHouseholdRanks->bindParam(':date_obtained', $nullValue, PDO::PARAM_STR);
+				$insertHouseholdRanks->bindValue(':date_obtained', $nullValue, PDO::PARAM_STR);
 				foreach($ranksID as &$value2) {
 					$rank = $value2;
 					$insertHouseholdRanks->execute();
@@ -126,7 +116,7 @@
 				echo "Username is taken!";
 			}
 		} else {
-			echo "Username must be set and empty values must be null";
+			echo "Username and email must be set to a value and can't be empty, while other values that can and are empty must be null";
 		}
 		
 		
@@ -137,4 +127,12 @@
 	} catch(PDOException $e) {
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
 	}
+	
+function getIfEmpty($post) {
+    if (empty($post)) {
+		return null;
+	} else {
+		return $post;
+	}
+}
 ?>
