@@ -11,7 +11,7 @@
 		
 		
 		//Check that leaderboard_mode has been set
-		if (!empty($_GET["leaderboard_mode"]) && isset($_GET["household_id"]) {
+		if (!empty($_GET["leaderboard_mode"]) && isset($_GET["household_id"])) {
 			$sqlRetrieveLeaderboard = null;
 			$resultArray = array();
 			
