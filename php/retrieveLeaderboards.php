@@ -11,7 +11,7 @@
 		
 		
 		//Check that leaderboard_mode has been set
-		if (!empty($_GET["leaderboard_mode"])) {
+		if (!empty($_GET["leaderboard_mode"]) && isset($_GET["household_id"]) {
 			$sqlRetrieveLeaderboard = null;
 			$resultArray = array();
 			
@@ -63,8 +63,26 @@
 			}
 			$retrieveLeaderboard->execute();
 			$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
+			echo "After first fetching".var_dump($leaderboard)."\n";
 			
-			$jsonLeaderboard = json_encode($leaderboard);
+			
+			//Should find index of household that is currently fetching the leaderboard
+			$currentHouseholdIndex= array_search($_GET["household_id"], array_column($leaderboard, "household_id"));
+			$resultArray["currentHouseholdIndex"] = $currentHouseholdIndex;
+			echo "\nCurrent household Index = ".$currentHouseholdIndex."\n";
+			
+			//Should remove all household_ids from the leaderboard array as they aren't needed clientside thus reducing overhead
+			foreach($leaderboard as $key => $household) {
+				foreach($household as $key2 => $value2) {
+					if ($key2 == "household_id") {
+						unset($leaderboard[$key][$key2]);
+					}
+				}
+			}
+			echo "After unsettting household_id".var_dump($leaderboard)."\n";
+			$resultArray["leaderboard"] = $leaderboard;
+			
+			$jsonLeaderboard = json_encode($resultArray);
 			
 			if (isset($_GET["callback"])) {
 				$callback = $_GET["callback"];
