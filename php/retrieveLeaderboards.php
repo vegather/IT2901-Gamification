@@ -63,13 +63,14 @@
 			}
 			$retrieveLeaderboard->execute();
 			$leaderboard = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
-			echo "After first fetching".var_dump($leaderboard)."\n";
+			echo $leaderboard;
 			
 			
 			//Should find index of household that is currently fetching the leaderboard
 			$currentHouseholdIndex= array_search($_GET["household_id"], array_column($leaderboard, "household_id"));
 			$resultArray["currentHouseholdIndex"] = $currentHouseholdIndex;
-			echo "\nCurrent household Index = ".$currentHouseholdIndex."\n";
+			echo $currentHouseholdIndex;
+			echo $resultArray;
 			
 			//Should remove all household_ids from the leaderboard array as they aren't needed clientside thus reducing overhead
 			foreach($leaderboard as $key => $household) {
@@ -79,7 +80,7 @@
 					}
 				}
 			}
-			echo "After unsettting household_id".var_dump($leaderboard)."\n";
+			echo $leaderboard;
 			$resultArray["leaderboard"] = $leaderboard;
 			
 			$jsonLeaderboard = json_encode($resultArray);
@@ -92,7 +93,7 @@
 			}
 			
 		} else {
-			echo "Need the leaderboard_mode to retrieve leaderboards!";
+			echo "Need the leaderboard_mode and household_id of household making request to retrieve leaderboards!";
 		}
 		
 		
