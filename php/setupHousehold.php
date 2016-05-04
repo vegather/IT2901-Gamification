@@ -16,7 +16,7 @@
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
-		
+		error_log("Testing to see if it wrote to log!", 3, "/var/log/cossmic.log");
 		echo "Household_id = ".(isset($_POST["household_id"]))."	Username = ".(!empty($_POST["username"]))."		email_hash = ".(!empty($_POST["email_hash"]));
 		//Check if parameters have been set and are not empty.
 		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
