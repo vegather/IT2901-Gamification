@@ -28,18 +28,18 @@
 			
 			//Check to see if username is available
 			$sqlCheckUsernameAvailability = "
-				SELECT *
+				SELECT COUNT(*)
 				FROM household
 				WHERE username = :username
+				LIMIT 1
 				";
 			$checkUsernameAvailability = $dbh->prepare($sqlCheckUsernameAvailability);
 			$checkUsernameAvailability->bindParam(':username', $username, PDO::PARAM_STR);
 			$checkUsernameAvailability->execute();
-			$usernameAvailability = $checkUsernameAvailability->get_result();
 			error_log("Got past usernameAvailability query!\n", 3, "/var/log/cossmic.log");
 			
 			//If username is available start setting up household in database
-			if (!$usernameAvailability->num_rows>0) {
+			if (!($checkUsernameAvailability->fetchColumn())) {
 				error_log("Got past parameter usernameAvailability check!\n", 3, "/var/log/cossmic.log");
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
