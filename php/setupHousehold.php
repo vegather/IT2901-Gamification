@@ -1,8 +1,6 @@
 <?php
 	//Required for $_POST calls
 	header('Access-Control-Allow-Origin: *');
-	header('Access-Control-Allow-Methods: POST');
-	header('Access-Control-Max-Age: 1000');
 	
 	//Connection info for database
 	$hostname = 'localhost';
