@@ -41,21 +41,21 @@
 			if (!$usernameAvailability->num_rows>0) {
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
-					INSERT INTO household(household_id, username, email_hash residents, house_type, size, age, electric_heating, electric_car)
-					VALUES(:household_id, :username, :email_hash, :residents, :house_type, :size, :age, :electric_heating, :electric_car)
+					INSERT INTO household(household_id, username, email_hash)
+					VALUES(:household_id, :username, :email_hash)
 					";
 				$insertUser = $dbh->prepare($sqlInsertUser);
 				$insertUser->bindParam(':household_id', $household_id, PDO::PARAM_INT);
 				$insertUser->bindParam(':username', $username, PDO::PARAM_STR);
 				$insertUser->bindParam(':email_hash', $email_hash, PDO::PARAM_STR);
-				$insertUser->bindValue(':residents', getIfEmpty($_POST["residents"]), PDO::PARAM_INT);
+				/*$insertUser->bindValue(':residents', getIfEmpty($_POST["residents"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':house_type', getIfEmpty($_POST["house_type"]), PDO::PARAM_STR);
 				$insertUser->bindValue(':size', getIfEmpty($_POST["size"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':age', getIfEmpty($_POST["age"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':electric_heating', getIfEmpty($_POST["electric_heating"]), PDO::PARAM_BOOL);
 				$insertUser->bindValue(':electric_car', getIfEmpty($_POST["electric_car"]), PDO::PARAM_INT);
 				$insertUser->execute();
-				
+				*/
 				
 				//Retrieves achievements that exists for use in set up
 				$sqlRetrieveAchievementsID = "
