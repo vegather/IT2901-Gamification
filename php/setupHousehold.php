@@ -33,7 +33,7 @@
 			
 			
 			//If username is available start setting up household in database
-			if !($usernameAvailability->num_rows>0) {
+			if (!$usernameAvailability->num_rows>0) {
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
 					INSERT INTO household(household_id, username, email_hash residents, house_type, size, age, electric_heating, electric_car)
