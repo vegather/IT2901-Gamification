@@ -1,4 +1,9 @@
 <?php
+	//Required for $_POST calls
+	header('Access-Control-Allow-Origin: *');
+	header('Access-Control-Allow-Methods: POST');
+	header('Access-Control-Max-Age: 1000');
+	
 	//Connection info for database
 	$hostname = 'localhost';
 	$username = 'root'; //Temporarily for testing purposes, create a MySQL user for this later
@@ -7,14 +12,13 @@
 	
 	//Null value for use later in code as parameter
 	$nullValue = null;
+
 	
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
-		echo $_POST["household_id"];
-		echo $_POST["username"];
-		echo $_POST["email_hash"];
+		
 		echo "Household_id = ".(isset($_POST["household_id"]))."	Username = ".(!empty($_POST["username"]))."		email_hash = ".(!empty($_POST["email_hash"]));
 		//Check if parameters have been set and are not empty.
 		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
