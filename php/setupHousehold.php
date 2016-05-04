@@ -6,7 +6,7 @@
 	$database = 'CoSSMunity';
 	
 	//Null value for use later in code as parameter
-	protected $nullValue = null;
+	$nullValue = null;
 	
 	//Connection to the database
 	try {
@@ -130,7 +130,7 @@
 	
 function getIfEmpty($post) {
     if (empty($post)) {
-		return null;
+		return $nullValue;
 	} else {
 		return $post;
 	}
