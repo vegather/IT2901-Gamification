@@ -14,10 +14,10 @@
 		
 		
 		//Check if parameters have been set and are not empty.
-		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email"])) {
+		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
 			$household_id = $_POST["household_id"];
 			$username = $_POST["username"];
-			$email_hash = $_POST["email"];
+			$email_hash = $_POST["email_hash"];
 			
 			
 			//Check to see if username is available
@@ -116,7 +116,7 @@
 				echo "Username is taken!";
 			}
 		} else {
-			echo "Username and email must be set to a value and can't be empty, while other values that can and are empty must be null";
+			echo "household_id, username and email_hash must be set to a value and can't be empty, while other values that can and are empty must be null";
 		}
 		
 		
