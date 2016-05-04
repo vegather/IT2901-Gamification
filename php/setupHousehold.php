@@ -26,7 +26,7 @@
 				FROM household
 				WHERE username = :username
 				";
-			$checkUsernameAvailability = dbh->prepare($sqlCheckUsernameAvailability);
+			$checkUsernameAvailability = $dbh->prepare($sqlCheckUsernameAvailability);
 			$checkUsernameAvailability->bindParam(':username', $username, PDO::PARAM_STR);
 			$checkUsernameAvailability->execute();
 			$usernameAvailability = $checkUsernameAvailability->get_result();
