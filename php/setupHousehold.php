@@ -53,9 +53,9 @@
 				$insertUser->bindValue(':size', getIfEmpty($_POST["size"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':age', getIfEmpty($_POST["age"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':electric_heating', getIfEmpty($_POST["electric_heating"]), PDO::PARAM_BOOL);
-				$insertUser->bindValue(':electric_car', getIfEmpty($_POST["electric_car"]), PDO::PARAM_INT);
+				$insertUser->bindValue(':electric_car', getIfEmpty($_POST["electric_car"]), PDO::PARAM_INT);*/
 				$insertUser->execute();
-				*/
+				
 				
 				//Retrieves achievements that exists for use in set up
 				$sqlRetrieveAchievementsID = "
