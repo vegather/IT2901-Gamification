@@ -12,7 +12,10 @@
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
-		
+		echo $_POST["household_id"];
+		echo $_POST["username"];
+		echo $_POST["email_hash"];
+		echo "Household_id = ".(isset($_POST["household_id"]))."	Username = ".(!empty($_POST["username"]))."		email_hash = ".(!empty($_POST["email_hash"]))
 		//Check if parameters have been set and are not empty.
 		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
 			$household_id = $_POST["household_id"];
@@ -72,7 +75,7 @@
 				$insertHouseholdAchievements->bindParam(':achievement_achievement_id', $achievement, PDO::PARAM_INT);
 				$insertHouseholdAchievements->bindParam(':achieved', $achieved = 0, PDO::PARAM_BOOL);
 				$insertHouseholdAchievements->bindValue(':date_achieved', $nullValue, PDO::PARAM_STR);
-				foreach($achievementsID as &$value) {
+				foreach($achievementsID as $value) {
 					$achievement = $value;
 					$insertHouseholdAchievements->execute();
 				}
