@@ -15,7 +15,7 @@
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
-		
+		file_put_contents("/var/log/cossmic.log", "");
 		error_log("Testing to see if it wrote to log!\n", 3, "/var/log/cossmic.log");
 		echo "Household_id = ".(isset($_POST["household_id"]))."	Username = ".(!empty($_POST["username"]))."		email_hash = ".(!empty($_POST["email_hash"]));
 		//Check if parameters have been set and are not empty.
@@ -136,7 +136,7 @@
 		//Close connection
 		$dbh = null;
 		error_log("Got to the closing of the connection!\n", 3, "/var/log/cossmic.log");
-		
+		error_log("---------------------------------------------------------------------------\n\n\n\n\n", 3, "/var/log/cossmic.log");
 		
 	} catch(PDOException $e) {
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
