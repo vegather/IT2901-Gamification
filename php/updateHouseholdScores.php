@@ -13,9 +13,9 @@
 		if (isset($_GET["household_id"])) {
 			//Note: Any change in database score types or order must be done here aswell.
 			//Is used to check for score types and insert them into the database.
-			$scoreTypeKeys = array("Total Score", "PV Score", "Grid Score", "Scheduling Score", "Share Score")
-			$scoreType = array(0,1,2,3,4)
-			$scoreTypes = array_combine($scoreTypeKeys, $scoreType)
+			$scoreTypeKeys = array("Total Score", "PV Score", "Grid Score", "Scheduling Score", "Share Score");
+			$scoreType = array(0,1,2,3,4);
+			$scoreTypes = array_combine($scoreTypeKeys, $scoreType);
 			
 			
 			//Is used as parameters in MySQL and DBO
@@ -29,7 +29,7 @@
 			
 			
 			//Fetches the multipliers from the game.ini file
-			$multipliers = parse_ini_file("/var/www/html/game.ini")
+			$multipliers = parse_ini_file("/var/www/html/game.ini");
 			
 			
 			//Calculates and stores the different score amounts.

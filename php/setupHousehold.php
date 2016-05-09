@@ -39,7 +39,7 @@
 			
 			//If username is available start setting up household in database
 			if (!($checkUsernameAvailability->fetchColumn())) {
-				$today = date("Y-m-d")
+				$today = date("Y-m-d");
 				
 				
 				error_log("Got past parameter usernameAvailability check!\n", 3, "/var/log/cossmic.log");
