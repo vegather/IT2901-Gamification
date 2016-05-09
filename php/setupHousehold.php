@@ -52,7 +52,7 @@
 				$insertUser->bindParam(':household_id', $household_id, PDO::PARAM_INT);
 				$insertUser->bindParam(':username', $username, PDO::PARAM_STR);
 				$insertUser->bindParam(':email_hash', $email_hash, PDO::PARAM_STR);
-				$insertUser->bindParam(':joined', $today, PDO::PARAM_STR)
+				$insertUser->bindParam(':joined', $today, PDO::PARAM_STR);
 				/*$insertUser->bindValue(':residents', getIfEmpty($_POST["residents"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':house_type', getIfEmpty($_POST["house_type"]), PDO::PARAM_STR);
 				$insertUser->bindValue(':size', getIfEmpty($_POST["size"]), PDO::PARAM_INT);
