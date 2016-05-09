@@ -8,25 +8,28 @@
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
-
+		
 		
 		if (isset($_GET["household_id"])) {
 			//Note: Any change in database score types or order must be done here aswell.
 			//Is used to check for score types and insert them into the database.
-			$scoreTypeKeys = array("Total Score", "PV Score", "Grid Score", "Scheduling Score", "Share Score")
-			$scoreType = array(0,1,2,3,4)
-			$scoreTypes = array_combine($scoreTypeKeys, $scoreType)
+			$scoreTypeKeys = array("Total Score", "PV Score", "Grid Score", "Scheduling Score", "Share Score");
+			$scoreType = array(0,1,2,3,4);
+			$scoreTypes = array_combine($scoreTypeKeys, $scoreType);
 			
 			
 			//Is used as parameters in MySQL and DBO
 			$household_id = $_GET["household_id"];
 			$type = null;
 			$points = null;
-			$pointsArray = array();
-			$totalPoints = null;
+			$pointsArray = array_combine($scoreType, $scoreType);
 			$startOfMonth = date("Y-m")."-01";
 			$startDate = null;
 			$endDate = date("Y-m-d");
+			
+			
+			//Fetches the multipliers from the game.ini file
+			$multipliers = parse_ini_file("/var/www/html/game.ini");
 			
 			
 			//Calculates and stores the different score amounts.
@@ -86,14 +89,14 @@
 					$startDate = "2010-01-01";
 					$checkHouseholdScoreExist->execute();
 					$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
-					if (count($householdScoreExist)) < 1) {
+					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
 				} else {
 					$startDate = $startOfMonth;
 					$checkHouseholdScorExist->execute();
 					$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
-					if (count($householdScoreExist)) < 1) {
+					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
 					$points = $pointsArray[($type-1)];
@@ -105,6 +108,8 @@
 			$points = $totalPoints;
 			$startDate = "2010-01-01";
 			$updateHouseholdScore->execute();
+		} else {
+			echo "household_id must be set in order to update scores for the household!";
 		}
 
 		

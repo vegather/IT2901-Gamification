@@ -17,7 +17,6 @@
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		file_put_contents("/var/log/cossmic.log", "");
 		error_log("Testing to see if it wrote to log!\n", 3, "/var/log/cossmic.log");
-		echo "Household_id = ".(isset($_POST["household_id"]))."	Username = ".(!empty($_POST["username"]))."		email_hash = ".(!empty($_POST["email_hash"]));
 		//Check if parameters have been set and are not empty.
 		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
 			error_log("Got past parameter exist check!\n", 3, "/var/log/cossmic.log");
@@ -40,16 +39,20 @@
 			
 			//If username is available start setting up household in database
 			if (!($checkUsernameAvailability->fetchColumn())) {
+				$today = date("Y-m-d");
+				
+				
 				error_log("Got past parameter usernameAvailability check!\n", 3, "/var/log/cossmic.log");
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
-					INSERT INTO household(household_id, username, email_hash)
-					VALUES(:household_id, :username, :email_hash)
+					INSERT INTO household(household_id, username, email_hash, joined)
+					VALUES(:household_id, :username, :email_hash, :joined)
 					";
 				$insertUser = $dbh->prepare($sqlInsertUser);
 				$insertUser->bindParam(':household_id', $household_id, PDO::PARAM_INT);
 				$insertUser->bindParam(':username', $username, PDO::PARAM_STR);
 				$insertUser->bindParam(':email_hash', $email_hash, PDO::PARAM_STR);
+				$insertUser->bindParam(':joined', $today, PDO::PARAM_STR);
 				/*$insertUser->bindValue(':residents', getIfEmpty($_POST["residents"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':house_type', getIfEmpty($_POST["house_type"]), PDO::PARAM_STR);
 				$insertUser->bindValue(':size', getIfEmpty($_POST["size"]), PDO::PARAM_INT);
@@ -86,6 +89,18 @@
 					$insertHouseholdAchievements->execute();
 				}
 				error_log("Got past connecting household to achievement query!\n", 3, "/var/log/cossmic.log");
+				
+				//Makes it so the user achieves the first achievement which is registering to CoSSMUnity
+				$sqlSetFirstAchievement = "
+					UPDATE household_achievements
+					SET achieved = 1, date_achieved = :date
+					WHERE household_household_id = :household_household_id
+					AND achievement_achievement_id = 0
+					";
+				$setFirstAchievement = $dbh->prepare($sqlSetFirstAchievement);
+				$setFirstAchievement->bindParam(':date', $today, PDO::PARAM_STR);
+				$setFirstAchievement->bindParam(':household_household_id', $household_id, PDO::PARAM_STR);
+				$setFirstAchievement->execute();
 				
 				
 				//Retrieves the ranks that exist for use in set up
@@ -125,6 +140,64 @@
 				$setFirstRank->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
 				$setFirstRank->execute();
 				error_log("Got past setting the first rank!\n", 3, "/var/log/cossmic.log");
+				
+				
+				//Is used to check for score types and insert them into the database.
+				$scoreTypeKeys = array("Total Score", "PV Score", "Grid Score", "Scheduling Score", "Share Score");
+				$scoreType = array(0,1,2,3,4);
+				$scoreTypes = array_combine($scoreTypeKeys, $scoreType);
+				
+				//Is used as parameters in MySQL and DBO
+				$type = null;
+				$startOfMonth = date("Y-m")."-01";
+				$startDate = null;
+				
+				//MySQL and DBO for checking if a score exists
+				$sqlCheckIfHouseholdScoreExist = "
+				SELECT *
+				FROM household_scores AS HS
+				WHERE HS.household_household_id = :household_id
+				AND HS.score_type_score_type_id = :score_type_id
+				AND HS.date BETWEEN :startDate AND :endDate
+				LIMIT 1
+				";
+				$checkIfHouseholdScoreExist = $dbh->prepare($sqlCheckIfHouseholdScoreExist);
+				$checkIfHouseholdScoreExist->bindParam(":household_id", $household_id, PDO::PARAM_INT);
+				$checkIfHouseholdScoreExist->bindParam(":score_type_id", $type, PDO::PARAM_INT);
+				$checkIfHouseholdScoreExist->bindParam(":startDate", $startDate, PDO::PARAM_STR);
+				$checkIfHouseholdScoreExist->bindParam(":endDate", $today, PDO::PARAM_STR);
+				
+				//MySQL and DBO for inserting missing household score types
+				$sqlInsertHouseholdScoreType = "
+				INSERT INTO household_scores(household_household_id, score_type_score_type_id, date, value)
+				VALUES (:household_id, :score_type_id, :date, :value)
+				";
+				$insertHouseholdScoreType = $dbh->prepare($sqlInsertHouseholdScoreType);
+				$insertHouseholdScoreType->bindParam(":household_id", $household_id, PDO::PARAM_INT);
+				$insertHouseholdScoreType->bindParam(":score_type_id", $type, PDO::PARAM_INT);
+				$insertHouseholdScoreType->bindParam(":date", $today, PDO::PARAM_STR);
+				$insertHouseholdScoreType->bindParam(":value", $amount = 0, PDO::PARAM_INT);
+				
+				
+				//Iterate over different household score types and check if each exists, and if not insert them into the table then update the score
+				foreach($scoreTypes as $key => $value) {
+					$type = $value;
+					if ($type == 0) {
+						$startDate = "2010-01-01";
+						$checkHouseholdScoreExist->execute();
+						$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+						if (count($householdScoreExist) < 1) {
+							$insertHouseholdScoreType->execute();
+						}
+					} else {
+						$startDate = $startOfMonth;
+						$checkHouseholdScorExist->execute();
+						$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+						if (count($householdScoreExist) < 1) {
+							$insertHouseholdScoreType->execute();
+						}
+					}
+				}
 			} else {
 				echo "Username is taken!";
 			}
@@ -136,7 +209,6 @@
 		//Close connection
 		$dbh = null;
 		error_log("Got to the closing of the connection!\n", 3, "/var/log/cossmic.log");
-		error_log("---------------------------------------------------------------------------\n\n\n\n\n", 3, "/var/log/cossmic.log");
 		
 	} catch(PDOException $e) {
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
