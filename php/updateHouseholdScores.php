@@ -108,6 +108,8 @@
 			$points = $totalPoints;
 			$startDate = "2010-01-01";
 			$updateHouseholdScore->execute();
+		} else {
+			echo "household_id must be set in order to update scores for the household!"
 		}
 
 		
