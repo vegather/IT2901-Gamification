@@ -18,7 +18,7 @@
 		$household_id = $_GET["household_id"];
 		//Echo a random tip from the tips array
 		$jsonTip = json_encode($tip);
-		if (isset($_GET["callback"]) {
+		if (isset($_GET["callback"])) {
 			echo echo $callback.'('.$jsonTip.');';
 		}
 		else {
