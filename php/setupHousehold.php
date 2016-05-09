@@ -186,14 +186,14 @@
 						$startDate = "2010-01-01";
 						$checkHouseholdScoreExist->execute();
 						$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
-						if (count($householdScoreExist)) < 1) {
+						if (count($householdScoreExist) < 1) {
 							$insertHouseholdScoreType->execute();
 						}
 					} else {
 						$startDate = $startOfMonth;
 						$checkHouseholdScorExist->execute();
 						$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
-						if (count($householdScoreExist)) < 1) {
+						if (count($householdScoreExist) < 1) {
 							$insertHouseholdScoreType->execute();
 						}
 					}
