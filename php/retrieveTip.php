@@ -8,20 +8,18 @@
 	"Your fridge is always on, making it one of your most expensive appliances. Make sure the door seal is tight and free from gaps so cold air can't escape.",
 	"Did you know your phone charger is still using energy even when your phone is not attached? Up to 10% of your electricity could be used by gadgets and appliances that are on standby.",
 	"Replace old incandescent and halogen light globes with energy-efficient globes. Energy-efficient globes save power and last longer. Light globes can sometimes be replaced for free or at reduced cost.",
-	"When you are cooking, use the microwave when you can – it uses much less energy than an electric oven. If you use the stove, keep lids on your pots to reduce cooking time."
+	"When you are cooking, use the microwave when you can. It uses much less energy than an electric oven. If you use the stove, keep lids on your pots to reduce cooking time."
 	);
-	
 	//Checks if household_id has been set
 	if (isset($_GET["household_id"])) {
 		$tip = array();
-		$tip["tip"] = $tips[rand(0, count($tips))];
+		$tip["tip"] = $tips[rand(0, count($tips)-1)];
 		$household_id = $_GET["household_id"];
-		//Echo a random tip from the tips array
 		$jsonTip = json_encode($tip);
+		//Echo a random tip from the tips array
 		if (isset($_GET["callback"])) {
 			echo $callback.'('.$jsonTip.');';
-		}
-		else {
+		} else {
 			echo $jsonTip;
 		}
 	} else {
