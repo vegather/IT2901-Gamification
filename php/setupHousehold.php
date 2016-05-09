@@ -17,7 +17,6 @@
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		file_put_contents("/var/log/cossmic.log", "");
 		error_log("Testing to see if it wrote to log!\n", 3, "/var/log/cossmic.log");
-		echo "Household_id = ".(isset($_POST["household_id"]))."	Username = ".(!empty($_POST["username"]))."		email_hash = ".(!empty($_POST["email_hash"]));
 		//Check if parameters have been set and are not empty.
 		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
 			error_log("Got past parameter exist check!\n", 3, "/var/log/cossmic.log");
@@ -40,16 +39,20 @@
 			
 			//If username is available start setting up household in database
 			if (!($checkUsernameAvailability->fetchColumn())) {
+				$today = date("Y-m-d")
+				
+				
 				error_log("Got past parameter usernameAvailability check!\n", 3, "/var/log/cossmic.log");
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
-					INSERT INTO household(household_id, username, email_hash)
-					VALUES(:household_id, :username, :email_hash)
+					INSERT INTO household(household_id, username, email_hash, joined)
+					VALUES(:household_id, :username, :email_hash, :joined)
 					";
 				$insertUser = $dbh->prepare($sqlInsertUser);
 				$insertUser->bindParam(':household_id', $household_id, PDO::PARAM_INT);
 				$insertUser->bindParam(':username', $username, PDO::PARAM_STR);
 				$insertUser->bindParam(':email_hash', $email_hash, PDO::PARAM_STR);
+				$insertUser->bindParam(':joined', $today, PDO::PARAM_STR)
 				/*$insertUser->bindValue(':residents', getIfEmpty($_POST["residents"]), PDO::PARAM_INT);
 				$insertUser->bindValue(':house_type', getIfEmpty($_POST["house_type"]), PDO::PARAM_STR);
 				$insertUser->bindValue(':size', getIfEmpty($_POST["size"]), PDO::PARAM_INT);
@@ -86,6 +89,18 @@
 					$insertHouseholdAchievements->execute();
 				}
 				error_log("Got past connecting household to achievement query!\n", 3, "/var/log/cossmic.log");
+				
+				//Makes it so the user achieves the first achievement which is registering to CoSSMUnity
+				$sqlSetFirstAchievement = "
+					UPDATE household_achievements
+					SET achieved = 1, date_achieved = :date
+					WHERE household_household_id = :household_household_id
+					AND achievement_achievement_id = 0
+					";
+				$setFirstAchievement = $dbh->prepare($sqlSetFirstAchievement);
+				$setFirstAchievement->bindParam(':date', $today, PDO::PARAM_STR);
+				$setFirstAchievement->bindParam(':household_household_id', $household_id, PDO::PARAM_STR);
+				$setFirstAchievement->execute();
 				
 				
 				//Retrieves the ranks that exist for use in set up
@@ -136,7 +151,6 @@
 		//Close connection
 		$dbh = null;
 		error_log("Got to the closing of the connection!\n", 3, "/var/log/cossmic.log");
-		error_log("---------------------------------------------------------------------------\n\n\n\n\n", 3, "/var/log/cossmic.log");
 		
 	} catch(PDOException $e) {
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
