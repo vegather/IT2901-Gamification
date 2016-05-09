@@ -18,7 +18,7 @@
 		$jsonTip = json_encode($tip);
 		//Echo a random tip from the tips array
 		if (isset($_GET["callback"])) {
-			echo $callback.'('.$jsonTip.');';
+			echo $_GET["callback"].'('.$jsonTip.');';
 		} else {
 			echo $jsonTip;
 		}
