@@ -9,9 +9,8 @@
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
-		//Check if household_id has been set as a parameter
+		
 		if (isset($_GET["household_id"])) {
-			//MySQL for retrieving all the achievements for the household_id in question
 			$sqlRetrieveHouseholdAchievements = "
 			SELECT A.achievement_image, A.achievement_name, A.description, HA.achieved
 			FROM achievement as A
@@ -32,6 +31,7 @@
 			} else {
 				echo $jsonHouseholdAchievements;
 			}
+			
 		} else {
 			echo "You need to set household_id to the household you want the achievements from!";
 		}

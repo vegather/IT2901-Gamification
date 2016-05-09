@@ -19,7 +19,7 @@
 			//This will retrieve the leaderboard over total score with parameter leaderboard_mode = total
 			if($_GET["leaderboard_mode"] === "total") {
 				$sqlRetrieveLeaderboard = "
-					SELECT HH.household_id, HH.email_hash, R.rank_id, HH.username, HS.value as score
+					SELECT HH.household_id, HH.email_hash, R.rank_image, HH.username, HS.value as score
 					FROM (
 						SELECT MAX(HR.rank_rank_id) AS householdMaxRank, HR.household_household_id
 						FROM household_ranks AS HR
@@ -39,7 +39,7 @@
 			elseif($_GET["leaderboard_mode"] === "timed") {
 				if(!empty($_GET["start_date"]) && !empty($_GET["end_date"])) {
 					$sqlRetrieveLeaderboard = "
-						SELECT HH.household_id, HH.email_hash, R.rank_id, HH.username, SUM(HS.value) as score
+						SELECT HH.household_id, HH.email_hash, R.rank_image, HH.username, SUM(HS.value) as score
 						FROM (
 							SELECT MAX(HR.rank_rank_id) AS householdMaxRank, HR.household_household_id
 							FROM household_ranks AS HR
