@@ -8,7 +8,7 @@
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
-
+		
 		
 		if (isset($_GET["household_id"])) {
 			//Note: Any change in database score types or order must be done here aswell.
@@ -22,11 +22,14 @@
 			$household_id = $_GET["household_id"];
 			$type = null;
 			$points = null;
-			$pointsArray = array();
-			$totalPoints = null;
+			$pointsArray = array_combine($scoreType, $scoreType);
 			$startOfMonth = date("Y-m")."-01";
 			$startDate = null;
 			$endDate = date("Y-m-d");
+			
+			
+			//Fetches the multipliers from the game.ini file
+			$multipliers = parse_ini_file("/var/www/html/game.ini")
 			
 			
 			//Calculates and stores the different score amounts.
