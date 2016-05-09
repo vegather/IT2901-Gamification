@@ -13,9 +13,17 @@
 	
 	//Checks if household_id has been set
 	if (isset($_GET["household_id"])) {
+		$tip = array();
+		$tip["tip"] = $tips[rand(0, count($tips))];
 		$household_id = $_GET["household_id"];
 		//Echo a random tip from the tips array
-		echo $tips[rand(0, count($tips))];
+		$jsonTip = json_encode($tip);
+		if (isset($_GET["callback"]) {
+			echo echo $callback.'('.$jsonTip.');';
+		}
+		else {
+			echo $jsonTip;
+		}
 	} else {
 		echo "household_id must be set in order to retrieve tips!";
 	}
