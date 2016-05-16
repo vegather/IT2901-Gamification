@@ -13,11 +13,11 @@
 		if (isset($_GET["household_id"])) {
 			//MySQL for retrieving all the achievements for the household_id in question
 			$sqlRetrieveHouseholdAchievements = "
-			SELECT A.achievement_image, A.achievement_name, A.description, HA.achieved
+			SELECT A.achievement_id, A.achievement_name, A.description, HA.achieved
 			FROM achievement as A
 			INNER JOIN household_achievements AS HA ON A.achievement_id = HA.achievement_achievement_id
 			WHERE HA.household_household_id = :household_id
-			GROUP BY A.achievement_name
+			ORDER BY HA.date_achieved IS NULL ASC
 			";
 			$retrieveHouseholdAchievements = $dbh->prepare($sqlRetrieveHouseholdAchievements);
 			$retrieveHouseholdAchievements->bindParam(":household_id", $_GET["household_id"], PDO::PARAM_STR);
