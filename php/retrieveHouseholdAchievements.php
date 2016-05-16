@@ -17,6 +17,7 @@
 			FROM achievement as A
 			INNER JOIN household_achievements AS HA ON A.achievement_id = HA.achievement_achievement_id
 			WHERE HA.household_household_id = :household_id
+			ORDER BY HA.date_achieved IS NULL ASC
 			";
 			$retrieveHouseholdAchievements = $dbh->prepare($sqlRetrieveHouseholdAchievements);
 			$retrieveHouseholdAchievements->bindParam(":household_id", $_GET["household_id"], PDO::PARAM_STR);
