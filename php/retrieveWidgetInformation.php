@@ -63,7 +63,7 @@
 			$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('Y-m').'-01', PDO::PARAM_STR);
 			$retrieveHouseholdsMonthScore->execute();
 			$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
-			$resultArray["householdsMonthScore"] = $householdsMonthScore;
+			$resultArray["monthlyLeaderboard"] = $householdsMonthScore;
 			
 			
 			$jsonResultArray = json_encode($resultArray);
