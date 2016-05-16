@@ -8,7 +8,7 @@
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
-				
+		
 		
 		//Check if parameter has been set from clientside, in this case household_id
 		if (isset($_GET["household_id"])) {
@@ -21,7 +21,7 @@
 				SELECT ((s.score-cr.requirement)/(nr.requirement-cr.requirement)) AS percent, nr.rank_id-1 AS id
 				FROM (SELECT SUM(value) AS score
 					FROM household_scores
-					WHERE score_type_score_type_id =0
+					WHERE score_type_score_type_id = 0
 					AND household_household_id = :household_household_id
 				) AS s,
 					(SELECT rank_id, requirement
@@ -36,7 +36,7 @@
 					WHERE HR.household_household_id = :household_household_id
 					ORDER BY rank_id ASC
 				) AS nr
-				WHERE nr.rank_id=(cr.rank_id+1)
+				WHERE nr.rank_id = (cr.rank_id+1)
 				AND ((s.score-cr.requirement)/(nr.requirement-cr.requirement))<1
 				ORDER BY cr.rank_id, nr.rank_id
 				LIMIT 0,1
