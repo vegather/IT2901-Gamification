@@ -39,7 +39,7 @@
 			$retrieveHouseholdRanks = $dbh->prepare($sqlRetrieveHouseholdRanks);
 			$retrieveHouseholdRanks->bindParam(":household_household_id", $household_id, PDO::PARAM_INT);
 			$retrieveHouseholdRanks->execute();
-			$householdRanks = $retrieveHouseholdRanks->fetch(PDO::FETCH_ASSOC);
+			$householdRanks = $retrieveHouseholdRanks->fetchAll(PDO::FETCH_ASSOC);
 			
 			
 			$jsonHouseholdRanks = json_encode($householdRanks);
