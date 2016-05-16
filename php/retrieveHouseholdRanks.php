@@ -46,7 +46,7 @@
 			
 			if (isset($_GET["callback"])) {
 				$callback = $_GET["callback"];
-				echo $callback.'('.$jsonHouseholdRanks.');';
+				echo $callback.'({"ranks":'.$jsonHouseholdRanks.'});';
 			}
 			else {
 				echo $jsonHouseholdRanks;
