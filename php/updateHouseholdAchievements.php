@@ -48,14 +48,6 @@
 			$householdJoined = $sqlRetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 				
 			$value = null;
-			//Må legge inn om achievementen er achieved
-			foreach ($householdNotAchieved as $value) {
-				$achievement = $value;
-				if ($achievement = 0) {
-					//run method
-				}
-			}
-			
 			//Checks if the user has been apart of the program for one quarter
 			if(in_arry($id = 4, $householdNotAchieved) $sqlRetrieveHouseholdJoined->add(new DateInterval('P3M') < date){
 				achievementAchived ($dbh , $id);
@@ -82,7 +74,7 @@
 			
 			
 		} else {
-			echo "You need to set household_id to the household you want the achievements!";
+			echo "You need to set household_id to the household if you want the achievements!";
 		}
 		
 		//Close connection
