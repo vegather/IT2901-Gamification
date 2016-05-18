@@ -8,79 +8,45 @@
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
-				
+		
 		
 		//Check if parameter has been set from clientside, in this case household_id
 		if (isset($_GET["household_id"])) {
 			$household_id = $_GET["household_id"];
 			$householdHighestRank = null;
 			$resultArray = array();
-		
-		
-			//Fetches the current rank the household is at, for use in the script
-			$sqlRetrieveHouseholdHighestRank = "
-				SELECT MAX(rank_rank_id) AS rank
-				FROM household_ranks
-				WHERE date_obtained IS NOT NULL
-				AND household_household_id = :household_household_id
+			
+			
+			$sqlRetrieveHouseholdRankAndProgress = "
+				SELECT ((s.score-cr.requirement)/(nr.requirement-cr.requirement)) AS percent, nr.rank_id-1 AS id
+				FROM (SELECT SUM(value) AS score
+					FROM household_scores
+					WHERE score_type_score_type_id = 0
+					AND household_household_id = :household_household_id
+				) AS s,
+					(SELECT rank_id, requirement
+					FROM household_ranks AS HR
+					INNER JOIN rank AS R ON HR.rank_rank_id = R.rank_id
+					WHERE HR.household_household_id = :household_household_id
+					ORDER BY rank_id ASC
+				) AS cr,
+					(SELECT rank_id, requirement
+					FROM household_ranks AS HR
+					INNER JOIN rank AS R ON HR.rank_rank_id = R.rank_id
+					WHERE HR.household_household_id = :household_household_id
+					ORDER BY rank_id ASC
+				) AS nr
+				WHERE nr.rank_id = (cr.rank_id+1)
+				AND ((s.score-cr.requirement)/(nr.requirement-cr.requirement))<1
+				ORDER BY cr.rank_id, nr.rank_id
+				LIMIT 0,1
 				";
-			$retrieveHouseholdHighestRank = $dbh->prepare($sqlRetrieveHouseholdHighestRank);
-			$retrieveHouseholdHighestRank->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
-			$retrieveHouseholdHighestRank->execute();
-			$householdHighestRank = $retrieveHouseholdHighestRank->fetch(PDO::FETCH_ASSOC);
-			$householdHighestRank = $householdHighestRank['rank'];
-			
-			
-			//Fetches the rank information for the users current rank for the widget
-			$sqlRetrieveHouseholdRankInformation = "
-				SELECT *
-				FROM rank
-				WHERE rank_id = :rank_id
-				";
-			$retrieveHouseholdRankInformation = $dbh->prepare($sqlRetrieveHouseholdRankInformation);
-			$retrieveHouseholdRankInformation->bindParam(':rank_id', $householdHighestRank, PDO::PARAM_INT);
-			$retrieveHouseholdRankInformation->execute();
-			$householdRankInformation = $retrieveHouseholdRankInformation->fetch(PDO::FETCH_ASSOC);
-			$currentRankRequirement = $householdRankInformation['requirement'];
-			$resultArray["rank_id"] = $householdRankInformation['rank_id'];
-			$resultArray["rank_name"] = $householdRankInformation['rank_name'];
-			$resultArray["requirement"] = $householdRankInformation['requirement'];
-			$resultArray["rank_image"] = $householdRankInformation['rank_image'];
-			
-			
-			//Fetches the requirement for the next rank for the household, which will be used for calculations in the script
-			$sqlRetrieveNextRankRequirement = "
-				SELECT requirement
-				FROM rank
-				WHERE rank_id = :rank_id
-				";
-			$retrieveNextRankRequirement = $dbh->prepare($sqlRetrieveNextRankRequirement);
-			$retrieveNextRankRequirement->bindParam(':rank_id', ++$householdHighestRank, PDO::PARAM_INT);
-			$retrieveNextRankRequirement->execute();
-			$nextRankRequirement = $retrieveNextRankRequirement->fetch(PDO::FETCH_ASSOC);
-			$nextRankRequirement = $nextRankRequirement['requirement'];
-			
-			
-			//Fetches the household total score, which will be used for calculations in the script
-			$sqlRetrieveHouseholdTotalScore = "
-				SELECT value
-				FROM household_scores
-				WHERE score_type_score_type_id = :score_type_score_type_id
-				AND household_household_id = :household_household_id
-				";
-			$retrieveHouseholdTotalScore = $dbh->prepare($sqlRetrieveHouseholdTotalScore);
-			$retrieveHouseholdTotalScore->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
-			$retrieveHouseholdTotalScore->bindParam(':score_type_score_type_id', $score_type_id = 0, PDO::PARAM_INT);
-			$retrieveHouseholdTotalScore->execute();
-			$householdTotalScore = $retrieveHouseholdTotalScore->fetch(PDO::FETCH_ASSOC);
-			$householdTotalScore = $householdTotalScore['value'];
-			
-			
-			//Calculate the percentage done for the next rank for use in the widget
-			$denominator = $nextRankRequirement - $currentRankRequirement;
-			$numerator = $householdTotalScore - $currentRankRequirement;
-			$percentage = $numerator / $denominator;
-			$resultArray["percentage"] = $percentage;
+			$retrieveHouseholdRankAndProgress = $dbh->prepare($sqlRetrieveHouseholdRankAndProgress);
+			$retrieveHouseholdRankAndProgress->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
+			$retrieveHouseholdRankAndProgress->execute();
+			$householdRankAndProgress = $retrieveHouseholdRankAndProgress->fetch(PDO::FETCH_ASSOC);
+			$resultArray["percent"] = $householdRankAndProgress["percent"];
+			$resultArray["id"] = $householdRankAndProgress["id"];
 			
 			
 			//Fetches the households monthly total score for the leaderboard on the widget
@@ -97,7 +63,8 @@
 			$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('Y-m').'-01', PDO::PARAM_STR);
 			$retrieveHouseholdsMonthScore->execute();
 			$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
-			$resultArray["householdsMonthScore"] = $householdsMonthScore;
+			$resultArray["monthlyLeaderboard"] = $householdsMonthScore;
+			
 			
 			$jsonResultArray = json_encode($resultArray);
 			

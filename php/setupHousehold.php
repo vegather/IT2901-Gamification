@@ -15,15 +15,12 @@
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
-		file_put_contents("/var/log/cossmic.log", "");
-		error_log("Testing to see if it wrote to log!\n", 3, "/var/log/cossmic.log");
 		//Check if parameters have been set and are not empty.
 		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
-			error_log("Got past parameter exist check!\n", 3, "/var/log/cossmic.log");
 			$household_id = $_POST["household_id"];
 			$username = $_POST["username"];
 			$email_hash = $_POST["email_hash"];
-			error_log("Got past parameter setting!\n", 3, "/var/log/cossmic.log");
+
 			
 			//Check to see if username is available
 			$sqlCheckUsernameAvailability = "
@@ -35,14 +32,13 @@
 			$checkUsernameAvailability = $dbh->prepare($sqlCheckUsernameAvailability);
 			$checkUsernameAvailability->bindParam(':username', $username, PDO::PARAM_STR);
 			$checkUsernameAvailability->execute();
-			error_log("Got past usernameAvailability query!\n", 3, "/var/log/cossmic.log");
+
 			
 			//If username is available start setting up household in database
 			if (!($checkUsernameAvailability->fetchColumn())) {
 				$today = date("Y-m-d");
 				
 				
-				error_log("Got past parameter usernameAvailability check!\n", 3, "/var/log/cossmic.log");
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
 					INSERT INTO household(household_id, username, email_hash, joined)
@@ -60,7 +56,6 @@
 				$insertUser->bindValue(':electric_heating', getIfEmpty($_POST["electric_heating"]), PDO::PARAM_BOOL);
 				$insertUser->bindValue(':electric_car', getIfEmpty($_POST["electric_car"]), PDO::PARAM_INT);*/
 				$insertUser->execute();
-				error_log("Got past insertUser query!\n", 3, "/var/log/cossmic.log");
 				
 				
 				//Retrieves achievements that exists for use in set up
@@ -71,7 +66,7 @@
 				$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievements);
 				$retrieveAchievementsID->execute();
 				$achievementsID = $retrieveAchievementsID->fetchAll(PDO::FETCH_NUM);
-				error_log("Got past achievement retrival query!\n", 3, "/var/log/cossmic.log");
+
 				
 				//Sets up the household connection to the different achievements
 				$achievement = null;
@@ -88,7 +83,7 @@
 					$achievement = $value;
 					$insertHouseholdAchievements->execute();
 				}
-				error_log("Got past connecting household to achievement query!\n", 3, "/var/log/cossmic.log");
+
 				
 				//Makes it so the user achieves the first achievement which is registering to CoSSMUnity
 				$sqlSetFirstAchievement = "
@@ -111,7 +106,7 @@
 				$retrieveRanksID = $dbh->prepare($sqlRetrieveRanksID);
 				$retrieveRanksID->execute();
 				$ranksID = $retrieveRanksID->fetchAll(PDO::FETCH_NUM);
-				error_log("Got past retrieve ranks query!\n", 3, "/var/log/cossmic.log");
+
 				
 				//Sets up the household connection to the different ranks
 				$rank = null;
@@ -127,7 +122,7 @@
 					$rank = $value2;
 					$insertHouseholdRanks->execute();
 				}
-				error_log("Got past connecting household to rank query!\n", 3, "/var/log/cossmic.log");
+
 				
 				//Sets it so that the household has achieved the first rank
 				$sqlSetFirstRank = "
@@ -139,7 +134,6 @@
 				$setFirstRank = $dbh->prepare($sqlSetFirstRank);
 				$setFirstRank->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
 				$setFirstRank->execute();
-				error_log("Got past setting the first rank!\n", 3, "/var/log/cossmic.log");
 				
 				
 				//Is used to check for score types and insert them into the database.
@@ -204,11 +198,11 @@
 		} else {
 			echo "household_id, username and email_hash must be set to a value and can't be empty, while other values that can and are empty must be null";
 		}
-		error_log("Got ouside the if else statement!\n", 3, "/var/log/cossmic.log");
+		
 		
 		//Close connection
 		$dbh = null;
-		error_log("Got to the closing of the connection!\n", 3, "/var/log/cossmic.log");
+		
 		
 	} catch(PDOException $e) {
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
