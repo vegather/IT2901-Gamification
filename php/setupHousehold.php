@@ -16,11 +16,12 @@
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		//Check if parameters have been set and are not empty.
-		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"])) {
+		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"]) && !empty($_POST["neighbourhood"]) {
 			$household_id = $_POST["household_id"];
 			$username = $_POST["username"];
 			$email_hash = $_POST["email_hash"];
-
+			$neighbourhood = $_POST["neighbourhood"];
+			
 			
 			//Check to see if username is available
 			$sqlCheckUsernameAvailability = "
@@ -41,11 +42,12 @@
 				
 				//Insert household into the database with the information provided
 				$sqlInsertUser = "
-					INSERT INTO household(household_id, username, email_hash, joined)
-					VALUES(:household_id, :username, :email_hash, :joined)
+					INSERT INTO household(household_id, neighbourhood, username, email_hash, joined)
+					VALUES(:household_id, :neighbourhood, :username, :email_hash, :joined)
 					";
 				$insertUser = $dbh->prepare($sqlInsertUser);
 				$insertUser->bindParam(':household_id', $household_id, PDO::PARAM_INT);
+				$insertUser->bindParam(':neighbourhood', $neighbourhood, PDO::PARAM_STR);
 				$insertUser->bindParam(':username', $username, PDO::PARAM_STR);
 				$insertUser->bindParam(':email_hash', $email_hash, PDO::PARAM_STR);
 				$insertUser->bindParam(':joined', $today, PDO::PARAM_STR);
