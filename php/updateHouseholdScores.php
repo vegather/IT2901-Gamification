@@ -1,9 +1,11 @@
 <?php
 	//Connection info for database
-	$hostname = 'localhost';
-	$username = 'root'; //Temporarily for testing purposes, create a MySQL user for this later
-	$password = 'cossmic'; //same as above
-	$database = 'CoSSMunity';
+	//Fetches connection information from the config.ini file then sets the connection variables
+	$iniArray = parse_ini_file("/var/www/html/config.ini", true);
+	$hostname = $iniArray["connectionInfo"]["hostname"];
+	$username = $iniArray["connectionInfo"]["username"];
+	$password = $iniArray["connectionInfo"]["password"];
+	$database = $iniArray["connectionInfo"]["database"];
 	
 	//Connection to the database
 	try {
@@ -31,13 +33,13 @@
 			$totalNumberOfDevices = null;
 			
 			//Fetches the multipliers from the game.ini file which are used to keep the scores within the same ranges
-			$multipliers = parse_ini_file("/var/www/html/game.ini");
+			$multipliers = parse_ini_file("/var/www/html/config.ini", true);
 			
 			//Calculates and stores the different score amounts.
-			$pvScore = ($production/$consumption) * $multipliers["pv"];
-			$gridScore = (1/$consumption) * $multipliers["grid"];
-			$schedulingScore = ($numberOfDevicesScheduled/$totalNumberOfDevices)  * $multipliers["scheduling"];
-			$sharingScore = ($shared/$consumption) * $multipliers["sharing"];
+			$pvScore = ($production/$consumption) * $multipliers["multipliers"]["pv"];
+			$gridScore = (1/$consumption) * $multipliers["multipliers"]["grid"];
+			$schedulingScore = ($numberOfDevicesScheduled/$totalNumberOfDevices)  * $multipliers["multipliers"]["scheduling"];
+			$sharingScore = ($shared/$consumption) * $multipliers["multipliers"]["sharing"];
 			$totalScore = $pvScore+$gridScore+$schedulingScore+$sharingScore;
 			$scores = array($totalScore, $pvScore, $gridScore, $schedulingScore, $sharingScore);
 			
