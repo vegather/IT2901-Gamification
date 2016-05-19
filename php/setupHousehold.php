@@ -16,7 +16,7 @@
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		//Check if parameters have been set and are not empty.
-		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"]) && !empty($_POST["neighbourhood"]) {
+		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["email_hash"]) && !empty($_POST["neighbourhood"])) {
 			$household_id = $_POST["household_id"];
 			$username = $_POST["username"];
 			$email_hash = $_POST["email_hash"];
