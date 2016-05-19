@@ -49,6 +49,18 @@
 			$resultArray["id"] = $householdRankAndProgress["id"];
 			
 			
+			//Fetches the neighbourhood_id of the household requesting the leaderboard
+			$sqlRetrieveHouseholdNeighbourhood = "
+				SELECT neighbourhood_id
+				FROM household
+				WHERE household_id = :household_id
+				";
+			$retrieveHouseholdNeighbourhood = $dbh->prepare($sqlRetrieveHouseholdNeighbourhood);
+			$retrieveHouseholdNeighbourhood->bindParam(":household_id", $household_id, PDO::PARAM_INT);
+			$retrieveHouseholdNeighbourhood->execute();
+			$householdNeighbourhood = $retrieveHouseholdNeighbourhood->fetch(PDO::FETCH_ASSOC);
+			$neighbourhood = $householdNeighbourhood["neighbourhood"];
+			
 			//Fetches the households monthly total score for the leaderboard on the widget
 			$sqlRetrieveHouseholdsMonthScore = "
 				SELECT username, SUM(value) AS score
@@ -56,11 +68,13 @@
 				INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
 				WHERE date>:startOfMonth
 				AND NOT score_type_score_type_id = 0
+				AND HH.neighbourhood = :neighbourhood
 				GROUP BY username
 				ORDER BY score DESC
 				";
 			$retrieveHouseholdsMonthScore = $dbh->prepare($sqlRetrieveHouseholdsMonthScore);
 			$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('Y-m').'-01', PDO::PARAM_STR);
+			$retrieveHouseholdsMonthScore->bindParam(":neighbourhood", $neighbourhood, PDO::PARAM_STR);
 			$retrieveHouseholdsMonthScore->execute();
 			$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
 			$resultArray["monthlyLeaderboard"] = $householdsMonthScore;

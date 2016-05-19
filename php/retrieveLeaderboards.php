@@ -16,6 +16,18 @@
 			$resultArray = array();
 			
 			
+			//Fetches the neighbourhood_id of the household requesting the leaderboard
+			$sqlRetrieveHouseholdNeighbourhood = "
+				SELECT neighbourhood
+				FROM household
+				WHERE household_id = :household_id
+				";
+			$retrieveHouseholdNeighbourhood = $dbh->prepare($sqlRetrieveHouseholdNeighbourhood);
+			$retrieveHouseholdNeighbourhood->bindParam(":household_id", $_GET["household_id"], PDO::PARAM_INT);
+			$retrieveHouseholdNeighbourhood->execute();
+			$householdNeighbourhood = $retrieveHouseholdNeighbourhood->fetch(PDO::FETCH_ASSOC);
+			$neighbourhood = $householdNeighbourhood["neighbourhood"];
+			
 			//This will retrieve the leaderboard over total score with parameter leaderboard_mode = total
 			if($_GET["leaderboard_mode"] === "total") {
 				$sqlRetrieveLeaderboard = "
@@ -30,10 +42,12 @@
 					INNER JOIN rank AS R ON maxRank.householdMaxRank = R.rank_id
 					INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
 					WHERE HS.score_type_score_type_id = 0
+					AND HH.neighbourhood = :neighbourhood
 					GROUP BY HH.household_id
 					ORDER BY score DESC
 					";
 				$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
+				$retrieveLeaderboard->bindParam(":neighbourhood", $neighbourhood, PDO::PARAM_STR);
 			}
 			//This will retrieve the leaderboard over a set timespan with the parameters start_date and end_date in the format yyyy-mm-dd with parameter leaderboard_mode = timed
 			elseif($_GET["leaderboard_mode"] === "timed") {
@@ -51,12 +65,14 @@
 						INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
 						WHERE NOT HS.score_type_score_type_id = 0
 						AND HS.date BETWEEN :startDate AND :endDate
+						AND HH.neighbourhood = :neighbourhood
 						GROUP BY HH.household_id
 						ORDER BY score DESC
 						";
 					$retrieveLeaderboard = $dbh->prepare($sqlRetrieveLeaderboard);
 					$retrieveLeaderboard->bindParam(":startDate", $_GET["start_date"], PDO::PARAM_STR);
 					$retrieveLeaderboard->bindParam(":endDate",  $_GET["end_date"], PDO::PARAM_STR);
+					$retrieveLeaderboard->bindParam(":neighbourhood", $neighbourhood, PDO::PARAM_STR);
 				} else {
 					echo "Need the start_date and end_date to retrieve leaderboards from a timespan!";
 				}
