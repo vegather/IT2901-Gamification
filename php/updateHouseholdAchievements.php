@@ -44,27 +44,6 @@
 				achievementAchived ($dbh , $id);
 			}
 			
-			// Quarterly Report. Checks if the user has been apart of the program for one quarter
-			if(in_arry($id = 3, $householdNotAchieved) && $dateAfterOneMonthJoined = date("Y-m-d", strtotime($householdJoined."-3 month")) > date("Y-m-d")){
-				achievementAchived ($dbh , $id);
-			}
-			
-			//Yearly Report. Checks if the user has been in the program for 1 year
-			if( in_arry($id = 5, $householdNotAchieved) && $dateAfterOneYearJoined = date("Y-m-d", strtotime($householdJoined."-1 year")) > date("Y-m-d")){
-				//MySQL and DBO for updating achieved achievemets
-				achievementAchived ($dbh , $id);
-			}
-			
-			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if( in_arry($id = 7, $householdNotAchieved) && getTotalscore($dbh) >= 5000){
-				achievementAchived ($dbh , $id);
-			}
-			
-			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if( in_arry($id = 8, $householdNotAchieved) && getTotalscore($dbh) >= 10000){
-				achievementAchived ($dbh , $id);
-			}
-			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
 			if (in_arry($id = 2, $householdNotAchieved) && $dateAfterOneJoinedMonthlyImprover = date("Y-m-d", strtotime($householdJoined."-3 month")) > date("Y-m-d")){
 				$startOfSecondToLastMonth = date("Y-m-d", strtotime($startOfLastMonth."-1 month"));	
@@ -74,6 +53,11 @@
 				if (scoreLastMonth > scoreSecondToLastMonth){
 					achievementAchived($dbh, $id);
 				}
+			}
+			
+			// Quarterly Report. Checks if the user has been apart of the program for one quarter
+			if(in_arry($id = 3, $householdNotAchieved) && $dateAfterOneMonthJoined = date("Y-m-d", strtotime($householdJoined."-3 month")) > date("Y-m-d")){
+				achievementAchived ($dbh , $id);
 			}
 			
 			// Quarterly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 quarters and if the user has the requirements to achieve it
@@ -88,8 +72,14 @@
 				}
 			}
 			
+			//Yearly Report. Checks if the user has been in the program for 1 year
+			if( in_arry($id = 5, $householdNotAchieved) && $dateAfterOneYearJoined = date("Y-m-d", strtotime($householdJoined."-1 year")) > date("Y-m-d")){
+				//MySQL and DBO for updating achieved achievemets
+				achievementAchived ($dbh , $id);
+			}
+			
 			// Yearly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 years and if the user has the requirements to achieve it
-			if (in_arry($id = 4, $householdNotAchieved) && $dateAfterOneJoinedYearlyImprover = date("Y-m-d", strtotime($householdJoined."-13 month")) > date("Y-m-d"))){
+			if (in_arry($id = 6, $householdNotAchieved) && $dateAfterOneJoinedYearlyImprover = date("Y-m-d", strtotime($householdJoined."-13 month")) > date("Y-m-d"))){
 				$startOfLastYear = date("Y-m-d", strtotime($startOfLastMonth."-1 year"));				
 				$startOfSecondToLastYear = date("Y-m-d", strtotime($startOfLastYear."-1 year"));
 				$endOftheSecondToLastYear = date("Y-m-t", strtotime($startOfSecondToLastYear."-1 month"));
@@ -98,6 +88,16 @@
 				if (scoreLastYear > scoreSecondToLastYear){
 					achievementAchived($dbh, $id);
 				}
+			}
+			
+			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
+			if( in_arry($id = 7, $householdNotAchieved) && getTotalscore($dbh) >= 5000){
+				achievementAchived ($dbh , $id);
+			}
+			
+			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
+			if( in_arry($id = 8, $householdNotAchieved) && getTotalscore($dbh) >= 10000){
+				achievementAchived ($dbh , $id);
 			}
 			
 			
