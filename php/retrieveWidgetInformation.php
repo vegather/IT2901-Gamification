@@ -50,16 +50,16 @@
 			
 			
 			//Fetches the neighbourhood_id of the household requesting the leaderboard
-			$sqlRetrieveHouseholdNeighbourhoodID = "
+			$sqlRetrieveHouseholdNeighbourhood = "
 				SELECT neighbourhood_id
 				FROM household
 				WHERE household_id = :household_id
 				";
-			$retrieveHouseholdNeighbourhoodID = $dbh->prepare($sqlRetrieveHouseholdNeighbourhoodID);
-			$retrieveHouseholdNeighbourhoodID->bindParam(":household_id", $household_id, PDO::PARAM_INT);
-			$retrieveHouseholdNeighbourhoodID->execute();
-			$householdNeighbourhoodID = $retrieveHouseholdNeighbourhoodID->fetch(PDO::FETCH_ASSOC);
-			$neighbourhoodID = $householdNeighbourhoodID["neighbourhood_id"];
+			$retrieveHouseholdNeighbourhood = $dbh->prepare($sqlRetrieveHouseholdNeighbourhood);
+			$retrieveHouseholdNeighbourhood->bindParam(":household_id", $household_id, PDO::PARAM_INT);
+			$retrieveHouseholdNeighbourhood->execute();
+			$householdNeighbourhood = $retrieveHouseholdNeighbourhood->fetch(PDO::FETCH_ASSOC);
+			$neighbourhood = $householdNeighbourhood["neighbourhood"];
 			
 			//Fetches the households monthly total score for the leaderboard on the widget
 			$sqlRetrieveHouseholdsMonthScore = "
@@ -68,13 +68,13 @@
 				INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
 				WHERE date>:startOfMonth
 				AND NOT score_type_score_type_id = 0
-				AND HH.neighbourhood_id = :neighbourhood_id
+				AND HH.neighbourhood = :neighbourhood
 				GROUP BY username
 				ORDER BY score DESC
 				";
 			$retrieveHouseholdsMonthScore = $dbh->prepare($sqlRetrieveHouseholdsMonthScore);
 			$retrieveHouseholdsMonthScore->bindParam(':startOfMonth', $date = date('Y-m').'-01', PDO::PARAM_STR);
-			$retrieveHouseholdsMonthScore->bindParam(":neighbourhood_id", $neighbourhoodID, PDO::PARAM_INT);
+			$retrieveHouseholdsMonthScore->bindParam(":neighbourhood", $neighbourhood, PDO::PARAM_STR);
 			$retrieveHouseholdsMonthScore->execute();
 			$householdsMonthScore = $retrieveHouseholdsMonthScore->fetchAll(PDO::FETCH_ASSOC);
 			$resultArray["monthlyLeaderboard"] = $householdsMonthScore;
