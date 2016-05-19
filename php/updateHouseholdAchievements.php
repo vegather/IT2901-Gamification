@@ -1,10 +1,10 @@
 <?php
-//Connection info for database
-	$hostname = 'localhost';
-	$username = 'root'; //Temporarily for testing purposes, create a MySQL user for this later
-	$password = 'cossmic'; //same as above
-	$database = 'CoSSMunity';
-	
+	//Fetches connection information from the config.ini file then sets the connection variables
+	$iniArray = parse_ini_file("/var/www/html/config.ini", true);
+	$hostname = $iniArray["connectionInfo"]["hostname"];
+	$username = $iniArray["connectionInfo"]["username"];
+	$password = $iniArray["connectionInfo"]["password"];
+	$database = $iniArray["connectionInfo"]["database"];
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
