@@ -1,41 +1,33 @@
 <?php
-//Connection info for database
-	$hostname = 'localhost';
-	$username = 'root'; //Temporarily for testing purposes, create a MySQL user for this later
-	$password = 'cossmic'; //same as above
-	$database = 'CoSSMunity';
-	
+	//Fetches connection information from the config.ini file then sets the connection variables
+	$iniArray = parse_ini_file("/var/www/html/config.ini", true);
+	$hostname = $iniArray["connectionInfo"]["hostname"];
+	$username = $iniArray["connectionInfo"]["username"];
+	$password = $iniArray["connectionInfo"]["password"];
+	$database = $iniArray["connectionInfo"]["database"];
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
 		//Check if household_id has been set as a parameter
 		if (isset($_GET["household_id"])) {
+			
+			// Parameters for MySQL abd DBO
 			$household_id = $_GET["household_id"];
+			$startOfLastMonth = date("Y-m-d", strtotime("first day of previous month"));	
+			$endOftheLastMonth = date("Y-m-d", strtotime("last day of previous month"));			
 			
 			//MySQL for retrieving all the achievements that are not yet schieved for the household_id in question
 			$sqlRetrieveHouseholdNotAchievedAchievements = "
-			SELECT A.achievement_id
-			FROM achievement as A
-			INNER JOIN household_achievements AS HA ON A.achievement_id = HA.achievement_achievement_id
-			WHERE HA.household_household_id = :household_id
-			AND HA.achieved = 0
+				SELECT A.achievement_id
+				FROM achievement as A
+				INNER JOIN household_achievements AS HA ON A.achievement_id = HA.achievement_achievement_id
+				WHERE HA.household_household_id = :household_id
+				AND HA.achieved = 0
 			";
-			$sqlRetrieveHouseholdNotAchievedAchievements = $dbh->prepare($sqlRetrieveHouseholdAchievements);
-			$sqlRetrieveHouseholdNotAchievedAchievements->execute();
-			$householdNotAchieved = $sqlRetrieveHouseholdNotAchievedAchievements->fetchAll(PDO::FETCH_ASSOC);
-			
-			
-			//MySQL for retrieving totalscore for the household
-			$sqlRetrieveHouseholdTotalScore = "
-				SELECT value
-				FROM household_scores
-				WHERE score_type_score_type_id = :score_type_score_type_id
-				AND household_household_id = :household_id
-				";
-			$sqlRetrieveHouseholdTotalScore = $dbh->prepare($sqlRetrieveHouseholdTotalScore);
-			$sqlRetrieveHouseholdTotalScore->execute();
-			$householdTotalScore = $sqlRetrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
+			$RetrieveHouseholdNotAchievedAchievements = $dbh->prepare($sqlRetrieveHouseholdAchievements);
+			$RetrieveHouseholdNotAchievedAchievements->execute();
+			$householdNotAchieved = $RetrieveHouseholdNotAchievedAchievements->fetchAll(PDO::FETCH_ASSOC);
 			
 			//MySQL for retrieving the date the household joined
 			$sqlRetrieveHouseholdJoined = "
@@ -43,34 +35,70 @@
 			FROM household
 			WHERE household_household_id = :household_id
 			";
-			$sqlRetrieveHouseholdJoined = $dbh->prepare($sqlRetrieveHouseholdJoined);
-			$sqlRetrieveHouseholdJoined->execute();
-			$householdJoined = $sqlRetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
-				
-			$value = null;
-			//Checks if the user has been apart of the program for one quarter
-			if(in_arry($id = 4, $householdNotAchieved) $sqlRetrieveHouseholdJoined->add(new DateInterval('P3M') < date){
+			$RetrieveHouseholdJoined = $dbh->prepare($sqlRetrieveHouseholdJoined);
+			$RetrieveHouseholdJoined->execute();
+			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
+			
+			// Monthly Report. Checks if the user has been apart of the program for one quarter
+			if(in_arry($id = 1, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month ")) < date("Y-m-d")){
 				achievementAchived ($dbh , $id);
 			}
 			
-			//Checks if the user has been in the program for 1 year
-			if( in_arry($id = 5, $householdNotAchieved) $sqlRetrieveHouseholdJoined->add(new DateInterval('P1Y') < date){
+			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
+			if (in_arry($id = 2, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 2 month ")) < date("Y-m-d")){
+				$startOfSecondToLastMonth = date("Y-m-d", strtotime($startOfLastMonth."-1 month"));	
+				$endOftheSecondToLastMonth = date("Y-m-t", strtotime($startOfSecondToLastMonth));	
+				scoreLastMonth = getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth);
+				scoreSecondToLastMonth = getScoreBetweenDates ($dbh, $startOfSecondToLastMonth, $endOftheSecondToLastMonth);
+				if (scoreLastMonth > scoreSecondToLastMonth){
+					achievementAchived($dbh, $id);
+				}
+			}
+			
+			// Quarterly Report. Checks if the user has been apart of the program for one quarter
+			if(in_arry($id = 3, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 3 month ")) < date("Y-m-d")){
+				achievementAchived ($dbh , $id);
+			}
+			
+			// Quarterly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 quarters and if the user has the requirements to achieve it
+			if(in_arry($id = 4, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 7 month ")) < date("Y-m-d"))){
+				$startOfLastQuarter = date("Y-m-d", strtotime($startOfLastMonth."-2 month"));				
+				$startOfSecondToLastQuarter = date("Y-m-d", strtotime($startOfLastQuarter."-3 month"));
+				$endOftheSecondToLastQuarter = date("Y-m-t", strtotime($startOfSecondToLastMonth."-1 month"));
+				scoreLastQuarter = getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastQuarter);
+				scoreSecondToLastQuarter= getScoreBetweenDates ($dbh, $startOfSecondToLastQuarter, $endOftheSecondToLastQuarter);
+				if (scoreLastQuarter > scoreSecondToLastQuarter){
+					achievementAchived($dbh, $id);
+				}
+			}
+			
+			//Yearly Report. Checks if the user has been in the program for 1 year
+			if(in_arry($id = 5, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 year")) < date("Y-m-d")){
 				//MySQL and DBO for updating achieved achievemets
 				achievementAchived ($dbh , $id);
 			}
 			
-			//Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if( in_arry($id = 7, $householdNotAchieved) && $householdTotalScore > 10000){
+			// Yearly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 years and if the user has the requirements to achieve it
+			if(in_arry($id = 6, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 25 month ")) < date("Y-m-d"))){
+				$startOfLastYear = date("Y-m-d", strtotime($startOfLastMonth."-1 year"));				
+				$startOfSecondToLastYear = date("Y-m-d", strtotime($startOfLastYear."-1 year"));
+				$endOftheSecondToLastYear = date("Y-m-t", strtotime($startOfSecondToLastYear."-1 month"));
+				scoreLastYear = getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastYear);
+				scoreSecondToLastYear= getScoreBetweenDates ($dbh, $startOfSecondToLastYear, $endOftheSecondToLastYear);
+				if (scoreLastYear > scoreSecondToLastYear){
+					achievementAchived($dbh, $id);
+				}
+			}
+			
+			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
+			if(in_arry($id = 7, $householdNotAchieved) && getTotalscore($dbh) >= 5000){
 				achievementAchived ($dbh , $id);
 			}
 			
-			//MySQL and DBO for updating achieved achievemets
-			$sqlUpdateAchievedAchievements = "
-			UPDATE household_Achievents
-			SET date_achieved = CURDATE(),
-			AND achieved = 1
-			WHERE household_household_id = :household_id
-			";
+			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
+			if(in_arry($id = 8, $householdNotAchieved) && getTotalscore($dbh) >= 10000){
+				achievementAchived ($dbh , $id);
+			}
 			
 			
 		} else {
@@ -97,6 +125,37 @@ function achievementAchived ($PDO , $achivement_ID){
 			$UpdateHouseholdAchievements->bindParam(":achievement_ID", $achivment_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievemnts->execute();
 	}
+}
+
+//MySQL and DBO for getting score between two set dates
+function getScoreBetweenDates ($PDO, $startDate, $endDate){
+				$sqlRetrieveMonthScore = "
+						SELECT SUM(HS.value) as score
+						FROM household as HH
+						INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
+						WHERE NOT HS.score_type_score_type_id = 0
+						AND HS.date BETWEEN :startOfLastMonthDate AND :endOftheLastMonthDate
+					";
+				$retrieveMonthScore; = $dbh->prepare($sqlRetrieveMonthScore);
+				$retrieveMonthScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
+				$retrieveMonthScore->bindParam(":endDate",  $endDate, PDO::PARAM_STR);
+				$retrieveLeaderboard->execute();
+				$score = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
+				return $score
+}
+
+//MySQL and DBO for retrieving totalscore for the household
+function getTotalscore($PDO){
+			$sqlRetrieveHouseholdTotalScore = "
+					SELECT value
+					FROM household_scores
+					WHERE score_type_score_type_id = 0
+					AND household_household_id = :household_id
+				";
+			$RetrieveHouseholdTotalScore = $dbh->prepare($sqlRetrieveHouseholdTotalScore);
+			$RetrieveHouseholdTotalScore->execute();
+			$householdTotalScore = $RetrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
+			return $householdTotalScore
 }
 	
 ?>
