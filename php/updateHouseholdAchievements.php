@@ -40,12 +40,12 @@
 			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
 			// Monthly Report. Checks if the user has been apart of the program for one quarter
-			if(in_arry($id = 1, $householdNotAchieved) && $dateAfterOneMonthJoined = date("Y-m-d", strtotime($householdJoined."-1 month")) > date("Y-m-d")){
+			if(in_arry($id = 1, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month ")) < date("Y-m-d")){
 				achievementAchived ($dbh , $id);
 			}
 			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
-			if (in_arry($id = 2, $householdNotAchieved) && $dateAfterOneJoinedMonthlyImprover = date("Y-m-d", strtotime($householdJoined."-3 month")) > date("Y-m-d")){
+			if (in_arry($id = 2, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 2 month ")) < date("Y-m-d")){
 				$startOfSecondToLastMonth = date("Y-m-d", strtotime($startOfLastMonth."-1 month"));	
 				$endOftheSecondToLastMonth = date("Y-m-t", strtotime($startOfSecondToLastMonth));	
 				scoreLastMonth = getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth);
@@ -56,12 +56,12 @@
 			}
 			
 			// Quarterly Report. Checks if the user has been apart of the program for one quarter
-			if(in_arry($id = 3, $householdNotAchieved) && $dateAfterOneMonthJoined = date("Y-m-d", strtotime($householdJoined."-3 month")) > date("Y-m-d")){
+			if(in_arry($id = 3, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 3 month ")) < date("Y-m-d")){
 				achievementAchived ($dbh , $id);
 			}
 			
 			// Quarterly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 quarters and if the user has the requirements to achieve it
-			if(in_arry($id = 4, $householdNotAchieved) && $dateAfterOneJoinedQuarterlyImprover = date("Y-m-d", strtotime($householdJoined."-7 month")) > date("Y-m-d"))){
+			if(in_arry($id = 4, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 7 month ")) < date("Y-m-d"))){
 				$startOfLastQuarter = date("Y-m-d", strtotime($startOfLastMonth."-2 month"));				
 				$startOfSecondToLastQuarter = date("Y-m-d", strtotime($startOfLastQuarter."-3 month"));
 				$endOftheSecondToLastQuarter = date("Y-m-t", strtotime($startOfSecondToLastMonth."-1 month"));
@@ -73,13 +73,13 @@
 			}
 			
 			//Yearly Report. Checks if the user has been in the program for 1 year
-			if(in_arry($id = 5, $householdNotAchieved) && $dateAfterOneYearJoined = date("Y-m-d", strtotime($householdJoined."-1 year")) > date("Y-m-d")){
+			if(in_arry($id = 5, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 year")) < date("Y-m-d")){
 				//MySQL and DBO for updating achieved achievemets
 				achievementAchived ($dbh , $id);
 			}
 			
 			// Yearly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 years and if the user has the requirements to achieve it
-			if(in_arry($id = 6, $householdNotAchieved) && $dateAfterOneJoinedYearlyImprover = date("Y-m-d", strtotime($householdJoined."-13 month")) > date("Y-m-d"))){
+			if(in_arry($id = 6, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 25 month ")) < date("Y-m-d"))){
 				$startOfLastYear = date("Y-m-d", strtotime($startOfLastMonth."-1 year"));				
 				$startOfSecondToLastYear = date("Y-m-d", strtotime($startOfLastYear."-1 year"));
 				$endOftheSecondToLastYear = date("Y-m-t", strtotime($startOfSecondToLastYear."-1 month"));
