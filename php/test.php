@@ -26,11 +26,9 @@
 			$checkIDAvailability->bindParam(':household_id', $household_id, PDO::PARAM_STR);
 			$checkIDAvailability->execute();
 			
-			
-			echo $checkIDAvailability->rowCount();
 			//If username is available start setting up household in database
 			if ($checkIDAvailability->rowCount() < 1) {
-				echo "ID available";
+				
 				//Check to see if username is available
 				$sqlCheckUsernameAvailability = "
 					SELECT username
@@ -41,14 +39,14 @@
 				$checkUsernameAvailability = $dbh->prepare($sqlCheckUsernameAvailability);
 				$checkUsernameAvailability->bindParam(':username', $householdUsername, PDO::PARAM_STR);
 				$checkUsernameAvailability->execute();
-				echo $checkUsernameAvailability->rowCount();
+				
 				if ($checkUsernameAvailability->rowCount() < 1) {
-					echo "Both Available!";
+					
 				} else {
-					echo "Username Taken!";
+					echo "username is taken!";
 				}
 			} else {
-				echo "ID Taken!";
+				echo "household_id is taken!";
 			}
 		} else {
 			echo "You need to set household_id & username!";
