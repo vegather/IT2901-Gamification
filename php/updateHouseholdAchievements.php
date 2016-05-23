@@ -141,7 +141,7 @@ function getScoreBetweenDates ($PDO, $startDate, $endDate){
 				$retrieveMonthScore->bindParam(":endDate",  $endDate, PDO::PARAM_STR);
 				$retrieveLeaderboard->execute();
 				$score = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
-				return $score
+				return $score;
 }
 
 //MySQL and DBO for retrieving totalscore for the household
@@ -155,7 +155,7 @@ function getTotalscore($PDO){
 			$RetrieveHouseholdTotalScore = $dbh->prepare($sqlRetrieveHouseholdTotalScore);
 			$RetrieveHouseholdTotalScore->execute();
 			$householdTotalScore = $RetrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
-			return $householdTotalScore
+			return $householdTotalScore;
 }
 	
 ?>
