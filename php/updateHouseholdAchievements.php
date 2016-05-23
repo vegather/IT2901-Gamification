@@ -124,7 +124,6 @@ function achievementAchieved ($PDO , $achievement_ID){
 			$UpdateHouseholdAchievements = $PDO->prepare($sqlRetrieveHouseholdAchievements);
 			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievemnts->execute();
-	}
 }
 
 //MySQL and DBO for getting score between two set dates
