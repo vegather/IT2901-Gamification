@@ -19,7 +19,7 @@
 			$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievements);
 			$retrieveAchievementsID->execute();
 			$achievementsID = $retrieveAchievementsID->fetchAll(PDO::FETCH_NUM);
-			echo $achievementsID;
+			echo json_encode($achievementsID);
 			} else {
 			echo "You need to set household_id!";
 		}
