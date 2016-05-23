@@ -78,7 +78,7 @@
 					SELECT achievement_id
 					FROM achievement
 					";
-				$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievements);
+				$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievementsID);
 				$retrieveAchievementsID->execute();
 				$achievementsID = $retrieveAchievementsID->fetchAll(PDO::FETCH_NUM);
 				
@@ -200,15 +200,15 @@
 					$type = $value;
 					if ($type == 0) {
 						$startDate = "2010-01-01";
-						$checkHouseholdScoreExist->execute();
-						$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+						$checkIfHouseholdScoreExist->execute();
+						$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
 						if (count($householdScoreExist) < 1) {
 							$insertHouseholdScoreType->execute();
 						}
 					} else {
 						$startDate = $startOfMonth;
-						$checkHouseholdScorExist->execute();
-						$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+						$checkIfHouseholdScoreExist->execute();
+						$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
 						if (count($householdScoreExist) < 1) {
 							$insertHouseholdScoreType->execute();
 						}
