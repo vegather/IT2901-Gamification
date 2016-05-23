@@ -17,7 +17,7 @@
 			
 			//Check to see if household_id is available
 			$sqlCheckIDAvailability = "
-				SELECT COUNT(*)
+				SELECT household_id
 				FROM household
 				WHERE household_id = :household_id
 				LIMIT 1
@@ -25,11 +25,12 @@
 			$checkIDAvailability = $dbh->prepare($sqlCheckIDAvailability);
 			$checkIDAvailability->bindParam(':household_id', $household_id, PDO::PARAM_STR);
 			$checkIDAvailability->execute();
+			$
 			
 			
 			//Check to see if username is available
 			$sqlCheckUsernameAvailability = "
-				SELECT COUNT(*)
+				SELECT username
 				FROM household
 				WHERE username = :username
 				LIMIT 1
