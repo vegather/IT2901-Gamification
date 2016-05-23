@@ -226,7 +226,7 @@
 				header("HTTP/1.1 400 household_id is taken!");
 			}
 		} else {
-			echo "household_id, username and email_hash must be set to a value and can't be empty, while other values that can and are empty must be null";
+			header("HTTP/1.1 400 household_id, username and email_hash must be set to a value and can't be empty, while other values that can and are empty must be null");
 		}
 		
 		
