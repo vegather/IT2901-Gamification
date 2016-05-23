@@ -25,7 +25,7 @@
 				WHERE HA.household_household_id = :household_id
 				AND HA.achieved = 0
 			";
-			$RetrieveHouseholdNotAchievedAchievements = $dbh->prepare($sqlRetrieveHouseholdAchievements);
+			$RetrieveHouseholdNotAchievedAchievements = $dbh->prepare($sqlRetrieveHouseholdNotAchievedAchievements);
 			$RetrieveHouseholdNotAchievedAchievements->execute();
 			$householdNotAchieved = $RetrieveHouseholdNotAchievedAchievements->fetchAll(PDO::FETCH_NUM);
 			
@@ -123,7 +123,7 @@ function achievementAchieved ($PDO , $achievement_ID){
 				WHERE household_household_id = :household_id
 				AND achievement_achievement_id = :achievement_id
 			";
-			$UpdateHouseholdAchievements = $PDO->prepare($sqlRetrieveHouseholdAchievements);
+			$UpdateHouseholdAchievements = $PDO->prepare($sqlUpdateHouseholdAchievements);
 			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievemnts->execute();
 }
