@@ -38,9 +38,10 @@
 			$checkUsernameAvailability->bindParam(':username', $householdUsername, PDO::PARAM_STR);
 			$checkUsernameAvailability->execute();
 			
-			
+			echo $checkIDAvailability->rowCount()
+			echo $checkUsernameAvailability->rowCount()
 			//If username is available start setting up household in database
-			if ($checkUsernameAvailability->rowCount() < 1 && $checkUsernameAvailability->rowCount() < 1) {
+			if ($checkIDAvailability->rowCount() < 1 && $checkUsernameAvailability->rowCount() < 1) {
 				echo "Available!";
 			} else {
 				echo "Taken!";
