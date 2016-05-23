@@ -48,8 +48,8 @@
 			if (in_arry($id = 2, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 2 month ")) < date("Y-m-d")){
 				$startOfSecondToLastMonth = date("Y-m-d", strtotime($startOfLastMonth."-1 month"));	
 				$endOftheSecondToLastMonth = date("Y-m-t", strtotime($startOfSecondToLastMonth));	
-				$scoreLastMonth = getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth);
-				$scoreSecondToLastMonth = getScoreBetweenDates ($dbh, $startOfSecondToLastMonth, $endOftheSecondToLastMonth);
+				$scoreLastMonth =& getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth);
+				$scoreSecondToLastMonth =& getScoreBetweenDates ($dbh, $startOfSecondToLastMonth, $endOftheSecondToLastMonth);
 				if (scoreLastMonth > scoreSecondToLastMonth){
 					achievementAchieved($dbh, $id);
 				}
@@ -65,8 +65,8 @@
 				$startOfLastQuarter = date("Y-m-d", strtotime($startOfLastMonth."-2 month"));				
 				$startOfSecondToLastQuarter = date("Y-m-d", strtotime($startOfLastQuarter."-3 month"));
 				$endOftheSecondToLastQuarter = date("Y-m-t", strtotime($startOfSecondToLastMonth."-1 month"));
-				$scoreLastQuarter = getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastQuarter);
-				$scoreSecondToLastQuarter= getScoreBetweenDates ($dbh, $startOfSecondToLastQuarter, $endOftheSecondToLastQuarter);
+				$scoreLastQuarter =& getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastQuarter);
+				$scoreSecondToLastQuarter=& getScoreBetweenDates ($dbh, $startOfSecondToLastQuarter, $endOftheSecondToLastQuarter);
 				if (scoreLastQuarter > scoreSecondToLastQuarter){
 					achievementAchieved($dbh, $id);
 				}
@@ -83,8 +83,8 @@
 				$startOfLastYear = date("Y-m-d", strtotime($startOfLastMonth."-1 year"));				
 				$startOfSecondToLastYear = date("Y-m-d", strtotime($startOfLastYear."-1 year"));
 				$endOftheSecondToLastYear = date("Y-m-t", strtotime($startOfSecondToLastYear."-1 month"));
-				$scoreLastYear = getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastYear);
-				$scoreSecondToLastYear= getScoreBetweenDates ($dbh, $startOfSecondToLastYear, $endOftheSecondToLastYear);
+				$scoreLastYear =& getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastYear);
+				$scoreSecondToLastYear =& getScoreBetweenDates ($dbh, $startOfSecondToLastYear, $endOftheSecondToLastYear);
 				if (scoreLastYear > scoreSecondToLastYear){
 					achievementAchieved($dbh, $id);
 				}
