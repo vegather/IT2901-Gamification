@@ -15,8 +15,10 @@
 			$sqlRetrieveAchievementsID = "
 					SELECT achievement_id
 					FROM achievement
+					WHERE achievement_id > :achievement_id
 					";
 			$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievements);
+			$retrieveAchievementsID->bindParam(":achievement_id", $requiredForFetching = -1, PDO::PARAM_INT);
 			$retrieveAchievementsID->execute();
 			$achievementsID = $retrieveAchievementsID->fetchAll(PDO::FETCH_NUM);
 			echo json_encode($achievementsID);
