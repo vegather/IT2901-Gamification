@@ -19,7 +19,7 @@
 		//Check if parameters have been set and are not empty.
 		if (isset($_POST["household_id"]) && !empty($_POST["username"]) && !empty($_POST["location"])) {
 			$household_id = $_POST["household_id"];
-			$username = $_POST["username"];
+			$householdUsername = $_POST["username"];
 			$email_hash = null;
 			$neighbourhood = $_POST["location"];
 			
@@ -29,6 +29,17 @@
 			
 			error_log("Got past parameter setting!\n", 3, "/var/log/cossmic.log");
 			
+			//Check to see if household_id is available
+			$sqlCheckIDAvailability = "
+				SELECT COUNT(*)
+				FROM household
+				WHERE household_id = :household_id
+				LIMIT 1
+				";
+			$checkIDAvailability = $dbh->prepare($sqlCheckIDAvailability);
+			$checkIDAvailability->bindParam(':household_id', $household_id, PDO::PARAM_STR);
+			$checkIDAvailability->execute();
+			
 			//Check to see if username is available
 			$sqlCheckUsernameAvailability = "
 				SELECT COUNT(*)
@@ -37,13 +48,13 @@
 				LIMIT 1
 				";
 			$checkUsernameAvailability = $dbh->prepare($sqlCheckUsernameAvailability);
-			$checkUsernameAvailability->bindParam(':username', $username, PDO::PARAM_STR);
+			$checkUsernameAvailability->bindParam(':username', $householdUsername, PDO::PARAM_STR);
 			$checkUsernameAvailability->execute();
 			
 			error_log("Got past usernameAvailability query!\n", 3, "/var/log/cossmic.log");
 			
 			//If username is available start setting up household in database
-			if (!($checkUsernameAvailability->fetchColumn())) {
+			if (!($checkUsernameAvailability->fetchColumn()) && !($checkUsernameAvailability->fetchColumn())) {
 				$today = date("Y-m-d");
 				
 				error_log("Got past parameter usernameAvailability check!\n", 3, "/var/log/cossmic.log");
@@ -57,7 +68,7 @@
 					$insertUser = $dbh->prepare($sqlInsertUser);
 					$insertUser->bindParam(':household_id', $household_id, PDO::PARAM_INT);
 					$insertUser->bindParam(':neighbourhood', $neighbourhood, PDO::PARAM_STR);
-					$insertUser->bindParam(':username', $username, PDO::PARAM_STR);
+					$insertUser->bindParam(':username', $householdUsername, PDO::PARAM_STR);
 					$insertUser->bindParam(':email_hash', $email_hash, PDO::PARAM_STR);
 					$insertUser->bindParam(':joined', $today, PDO::PARAM_STR);
 					/*$insertUser->bindValue(':residents', getIfEmpty($_POST["residents"]), PDO::PARAM_INT);
@@ -216,7 +227,7 @@
 				}
 				error_log("Got score inserting!\n", 3, "/var/log/cossmic.log");
 			} else {
-				echo "Username is taken!";
+				echo "Household_ID or Username is taken!";
 			}
 		} else {
 			echo "household_id, username and email_hash must be set to a value and can't be empty, while other values that can and are empty must be null";
