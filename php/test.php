@@ -12,6 +12,7 @@
 		
 		//Check if household_id has been set as a parameter
 		if (isset($_GET["household_id"])) {
+			$achievement = null;
 			$sqlRetrieveAchievementsID = "
 					SELECT achievement_id
 					FROM achievement
@@ -20,6 +21,10 @@
 			$retrieveAchievementsID->execute();
 			$achievementsID = $retrieveAchievementsID->fetchAll(PDO::FETCH_NUM);
 			echo json_encode($achievementsID);
+			foreach($achievementsID as $value) {
+					$achievement = $value;
+					echo $achievement."\n";
+				}
 			} else {
 			echo "You need to set household_id!";
 		}
