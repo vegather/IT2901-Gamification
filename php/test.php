@@ -40,7 +40,7 @@
 			
 			
 			//If username is available start setting up household in database
-			if (!($checkUsernameAvailability->fetchColumn()) && !($checkUsernameAvailability->fetchColumn())) {
+			if ($checkUsernameAvailability->rowCount() < 1 && $checkUsernameAvailability->rowCount() < 1) {
 				echo "Available!";
 			} else {
 				echo "Taken!";
