@@ -107,8 +107,10 @@
 				$insertHouseholdAchievements->bindParam(':achieved', $achieved = 0, PDO::PARAM_BOOL);
 				$insertHouseholdAchievements->bindValue(':date_achieved', $nullValue, PDO::PARAM_STR);
 				foreach($achievementsID as $value) {
-					$achievement = $value;
-					$insertHouseholdAchievements->execute();
+					foreach($value as $value2) {
+						$achievement = $value;
+						$insertHouseholdAchievements->execute();
+					}
 				}
 				
 				error_log("Got past connecting household to achievement query!\n", 3, "/var/log/cossmic.log");
@@ -148,9 +150,11 @@
 				$insertHouseholdRanks->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
 				$insertHouseholdRanks->bindParam(':rank_rank_id', $rank, PDO::PARAM_INT);
 				$insertHouseholdRanks->bindValue(':date_obtained', $nullValue, PDO::PARAM_STR);
-				foreach($ranksID as &$value2) {
-					$rank = $value2;
-					$insertHouseholdRanks->execute();
+				foreach($ranksID as &$value3) {
+					foreach($value3 as $value4) {
+						$rank = $value2;
+						$insertHouseholdRanks->execute();
+					}
 				}
 				
 				error_log("Got past connecting household to rank query!\n", 3, "/var/log/cossmic.log");
@@ -225,6 +229,7 @@
 						}
 					}
 				}
+				echo "Success";
 				error_log("Got score inserting!\n", 3, "/var/log/cossmic.log");
 			} else {
 				echo "Household_ID or Username is taken!";
