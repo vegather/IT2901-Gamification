@@ -135,6 +135,7 @@
 			$updateHouseholdRank = $dbh->prepare($sqlUpdateHouseholdRank);
 			$updateHouseholdRank->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$updateHouseholdRank->execute();
+			echo "Success!"
 		} else {
 			echo "household_id must be set in order to update scores for the household!";
 		}
