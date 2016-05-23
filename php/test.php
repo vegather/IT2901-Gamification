@@ -12,8 +12,8 @@
 		
 		//Check if household_id has been set as a parameter
 		if (isset($_GET["household_id"]) && !empty("username")) {
-			$household_id = $_POST["household_id"];
-			$householdUsername = $_POST["username"];
+			$household_id = $_GET["household_id"];
+			$householdUsername = $_GET["username"];
 			
 			//Check to see if household_id is available
 			$sqlCheckIDAvailability = "
