@@ -11,24 +11,42 @@
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
 		
 		//Check if household_id has been set as a parameter
-		if (isset($_GET["household_id"])) {
-			$achievement = null;
-			$sqlRetrieveAchievementsID = "
-					SELECT achievement_id
-					FROM achievement
-					";
-			$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievementsID);
-			$retrieveAchievementsID->execute();
-			$achievementsID = $retrieveAchievementsID->fetchAll(PDO::FETCH_NUM);
-			echo json_encode($achievementsID);
-			foreach($achievementsID as $value) {
-				foreach($value as $value2) {
-					$achievement = $value2;
-					echo $achievement."\n";
-				}
+		if (isset($_GET["household_id"]) && !empty("username")) {
+			$household_id = $_POST["household_id"];
+			$householdUsername = $_POST["username"];
+			
+			//Check to see if household_id is available
+			$sqlCheckIDAvailability = "
+				SELECT COUNT(*)
+				FROM household
+				WHERE household_id = :household_id
+				LIMIT 1
+				";
+			$checkIDAvailability = $dbh->prepare($sqlCheckIDAvailability);
+			$checkIDAvailability->bindParam(':household_id', $household_id, PDO::PARAM_STR);
+			$checkIDAvailability->execute();
+			
+			
+			//Check to see if username is available
+			$sqlCheckUsernameAvailability = "
+				SELECT COUNT(*)
+				FROM household
+				WHERE username = :username
+				LIMIT 1
+				";
+			$checkUsernameAvailability = $dbh->prepare($sqlCheckUsernameAvailability);
+			$checkUsernameAvailability->bindParam(':username', $householdUsername, PDO::PARAM_STR);
+			$checkUsernameAvailability->execute();
+			
+			
+			//If username is available start setting up household in database
+			if (!($checkUsernameAvailability->fetchColumn()) && !($checkUsernameAvailability->fetchColumn())) {
+				echo "Available!";
+			} else {
+				echo "Taken!";
 			}
 		} else {
-			echo "You need to set household_id!";
+			echo "You need to set household_id & username!";
 		}
 		
 		
