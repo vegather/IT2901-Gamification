@@ -134,7 +134,7 @@ function getScoreBetweenDates ($PDO, $startDate, $endDate){
 						FROM household as HH
 						INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
 						WHERE NOT HS.score_type_score_type_id = 0
-						AND HS.date BETWEEN :startOfLastMonthDate AND :endOftheLastMonthDate
+						AND HS.date BETWEEN :startDate AND :endDate
 					";
 				$retrieveMonthScore; = $dbh->prepare($sqlRetrieveMonthScore);
 				$retrieveMonthScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
