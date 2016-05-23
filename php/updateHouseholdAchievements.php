@@ -135,7 +135,7 @@ function getScoreBetweenDates ($PDO, $startDate, $endDate){
 						WHERE NOT HS.score_type_score_type_id = 0
 						AND HS.date BETWEEN :startDate AND :endDate
 					";
-				$retrieveMonthScore; = $dbh->prepare($sqlRetrieveMonthScore);
+				$retrieveMonthScore = $dbh->prepare($sqlRetrieveMonthScore);
 				$retrieveMonthScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
 				$retrieveMonthScore->bindParam(":endDate",  $endDate, PDO::PARAM_STR);
 				$retrieveMonthScore->execute();
