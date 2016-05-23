@@ -139,8 +139,8 @@ function getScoreBetweenDates ($PDO, $startDate, $endDate){
 				$retrieveMonthScore; = $dbh->prepare($sqlRetrieveMonthScore);
 				$retrieveMonthScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
 				$retrieveMonthScore->bindParam(":endDate",  $endDate, PDO::PARAM_STR);
-				$retrieveLeaderboard->execute();
-				$score = $retrieveLeaderboard->fetchAll(PDO::FETCH_ASSOC);
+				$retrieveMonthScore->execute();
+				$score = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
 				return $score;
 }
 
