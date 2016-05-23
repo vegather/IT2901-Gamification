@@ -41,7 +41,7 @@
 			
 			// Monthly Report. Checks if the user has been apart of the program for one quarter
 			if(in_arry($id = 1, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month ")) < date("Y-m-d")){
-				achievementAchived ($dbh , $id);
+				achievementAchieved ($dbh , $id);
 			}
 			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
@@ -51,13 +51,13 @@
 				scoreLastMonth = getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth);
 				scoreSecondToLastMonth = getScoreBetweenDates ($dbh, $startOfSecondToLastMonth, $endOftheSecondToLastMonth);
 				if (scoreLastMonth > scoreSecondToLastMonth){
-					achievementAchived($dbh, $id);
+					achievementAchieved($dbh, $id);
 				}
 			}
 			
 			// Quarterly Report. Checks if the user has been apart of the program for one quarter
 			if(in_arry($id = 3, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 3 month ")) < date("Y-m-d")){
-				achievementAchived ($dbh , $id);
+				achievementAchieved ($dbh , $id);
 			}
 			
 			// Quarterly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 quarters and if the user has the requirements to achieve it
@@ -68,14 +68,14 @@
 				scoreLastQuarter = getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastQuarter);
 				scoreSecondToLastQuarter= getScoreBetweenDates ($dbh, $startOfSecondToLastQuarter, $endOftheSecondToLastQuarter);
 				if (scoreLastQuarter > scoreSecondToLastQuarter){
-					achievementAchived($dbh, $id);
+					achievementAchieved($dbh, $id);
 				}
 			}
 			
 			//Yearly Report. Checks if the user has been in the program for 1 year
 			if(in_arry($id = 5, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 year")) < date("Y-m-d")){
 				//MySQL and DBO for updating achieved achievemets
-				achievementAchived ($dbh , $id);
+				achievementAchieved ($dbh , $id);
 			}
 			
 			// Yearly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 years and if the user has the requirements to achieve it
@@ -86,18 +86,18 @@
 				scoreLastYear = getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastYear);
 				scoreSecondToLastYear= getScoreBetweenDates ($dbh, $startOfSecondToLastYear, $endOftheSecondToLastYear);
 				if (scoreLastYear > scoreSecondToLastYear){
-					achievementAchived($dbh, $id);
+					achievementAchieved($dbh, $id);
 				}
 			}
 			
 			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
 			if(in_arry($id = 7, $householdNotAchieved) && getTotalscore($dbh) >= 5000){
-				achievementAchived ($dbh , $id);
+				achievementAchieved ($dbh , $id);
 			}
 			
 			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
 			if(in_arry($id = 8, $householdNotAchieved) && getTotalscore($dbh) >= 10000){
-				achievementAchived ($dbh , $id);
+				achievementAchieved ($dbh , $id);
 			}
 			
 			
@@ -113,16 +113,16 @@
 	}	
 
 //MySQL and DBO for updating achieved achievemets
-function achievementAchived ($PDO , $achivement_ID){
-		$sqlUpdateHouseholdAchievemnts = "
+function achievementAchieved ($PDO , $achievement_ID){
+		$sqlUpdateHouseholdAchievements = "
 				UPDATE household_achievements
 				SET date_achieved = CURDATE(),
 				SET achieved = 1;
 				WHERE household_household_id = :household_id
-				AND achievement_achievement_id = :achievement_ID
+				AND achievement_achievement_id = :achievement_id
 			";
 			$UpdateHouseholdAchievements = $PDO->prepare($sqlRetrieveHouseholdAchievements);
-			$UpdateHouseholdAchievements->bindParam(":achievement_ID", $achivment_ID, PDO::PARAM_INT);
+			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievemnts->execute();
 	}
 }
@@ -134,7 +134,7 @@ function getScoreBetweenDates ($PDO, $startDate, $endDate){
 						FROM household as HH
 						INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
 						WHERE NOT HS.score_type_score_type_id = 0
-						AND HS.date BETWEEN :startOfLastMonthDate AND :endOftheLastMonthDate
+						AND HS.date BETWEEN :startDate AND :endDate
 					";
 				$retrieveMonthScore; = $dbh->prepare($sqlRetrieveMonthScore);
 				$retrieveMonthScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
