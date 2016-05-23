@@ -27,7 +27,7 @@
 			";
 			$RetrieveHouseholdNotAchievedAchievements = $dbh->prepare($sqlRetrieveHouseholdAchievements);
 			$RetrieveHouseholdNotAchievedAchievements->execute();
-			$householdNotAchieved = $RetrieveHouseholdNotAchievedAchievements->fetchAll(PDO::FETCH_ASSOC);
+			$householdNotAchieved = $RetrieveHouseholdNotAchievedAchievements->fetchAll(PDO::FETCH_NUM);
 			
 			//MySQL for retrieving the date the household joined
 			$sqlRetrieveHouseholdJoined = "
@@ -39,7 +39,7 @@
 			$RetrieveHouseholdJoined->execute();
 			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
-			echo $householdJoined;
+			echo json_encode($householdJoined);
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
 			if(in_arry($id = 1, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month ")) < date("Y-m-d")){
