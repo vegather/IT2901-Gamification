@@ -22,10 +22,9 @@
 			$achievementsID = $retrieveAchievementsID->fetchColumn();
 			echo json_encode($achievementsID);
 			foreach($achievementsID as $value) {
-				foreach()
-					$achievement = $value;
-					echo $achievement."\n";
-				}
+				$achievement = $value;
+				echo $achievement."\n";
+			}
 			} else {
 			echo "You need to set household_id!";
 		}
