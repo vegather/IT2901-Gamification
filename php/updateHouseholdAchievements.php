@@ -41,6 +41,8 @@
 			
 			$householdJoined = $householdJoined[0];
 			$householdJoined = $householdJoined[0];
+			
+			
 			echo json_encode($householdJoined);
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
