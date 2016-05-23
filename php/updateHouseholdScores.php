@@ -90,8 +90,8 @@
 				$scoreType = $value;
 				if ($scoreType == 0) {
 					$startDate = "2010-01-01";
-					$checkHouseholdScoreExist->execute();
-					$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+					$checkIfHouseholdScoreExist->execute();
+					$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
 					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
@@ -99,8 +99,8 @@
 					$updateHouseholdScore->execute();
 				} else {
 					$startDate = $startOfMonth;
-					$checkHouseholdScorExist->execute();
-					$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+					$checkIfHouseholdScoreExist->execute();
+					$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
 					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
