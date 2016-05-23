@@ -19,13 +19,13 @@
 					";
 			$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievementsID);
 			$retrieveAchievementsID->execute();
-			$achievementsID = $retrieveAchievementsID->fetchColumn();
+			$achievementsID = $retrieveAchievementsID->fetch();
 			echo json_encode($achievementsID);
 			foreach($achievementsID as $value) {
 				$achievement = $value;
 				echo $achievement."\n";
 			}
-			} else {
+		} else {
 			echo "You need to set household_id!";
 		}
 		
