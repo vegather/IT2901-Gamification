@@ -79,7 +79,7 @@
 			}
 			
 			// Yearly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 years and if the user has the requirements to achieve it
-			if(in_arry($id = 6, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 25 month ")) < date("Y-m-d"))){
+			if(in_arry($id = 6, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 25 month ")) < date("Y-m-d")){
 				$startOfLastYear = date("Y-m-d", strtotime($startOfLastMonth."-1 year"));				
 				$startOfSecondToLastYear = date("Y-m-d", strtotime($startOfLastYear."-1 year"));
 				$endOftheSecondToLastYear = date("Y-m-t", strtotime($startOfSecondToLastYear."-1 month"));
