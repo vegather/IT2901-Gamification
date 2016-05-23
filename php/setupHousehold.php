@@ -153,12 +153,13 @@
 					//Sets it so that the household has achieved the first rank
 					$sqlSetFirstRank = "
 						UPDATE household_ranks
-						SET obtained = 1
+						SET date_obtained = :today
 						WHERE household_household_id = :household_household_id
 						AND rank_rank_id = (SELECT MIN(household_ranks.rank_rank_id) FROM household_ranks)
 						";
 					$setFirstRank = $dbh->prepare($sqlSetFirstRank);
 					$setFirstRank->bindParam(':household_household_id', $household_id, PDO::PARAM_INT);
+					$setFirstRank->bindParam(':today', $today, PDO::PARAM_STR);
 					$setFirstRank->execute();
 					
 					
