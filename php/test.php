@@ -19,9 +19,10 @@
 					";
 			$retrieveAchievementsID = $dbh->prepare($sqlRetrieveAchievementsID);
 			$retrieveAchievementsID->execute();
-			$achievementsID = $retrieveAchievementsID->fetchAll(PDO::FETCH_NUM);
+			$achievementsID = $retrieveAchievementsID->fetchColumn();
 			echo json_encode($achievementsID);
 			foreach($achievementsID as $value) {
+				foreach()
 					$achievement = $value;
 					echo $achievement."\n";
 				}
