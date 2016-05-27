@@ -59,7 +59,8 @@
 			echo json_encode($b);
 
 			if(in_array("1", $householdNotAchievedArray)){
-				achievementAchieved ($dbh , 1, $household_id);
+				$id = 1;
+				achievementAchieved ($dbh , $id, $household_id);
 				echo json_encode("1");
 			}
 			
@@ -71,13 +72,13 @@
 			}
 			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
-			if (in_array("2", $householdNotAchievedArray) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 2 month ")) < date("Y-m-d")){
+			if (in_array($id ="2", $householdNotAchievedArray) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 2 month ")) < date("Y-m-d")){
 				$startOfSecondToLastMonth = date("Y-m-d", strtotime($startOfLastMonth."-1 month"));	
 				$endOftheSecondToLastMonth = date("Y-m-t", strtotime($startOfSecondToLastMonth));	
 				$scoreLastMonth =& getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth, $household_id);
 				$scoreSecondToLastMonth =& getScoreBetweenDates ($dbh, $startOfSecondToLastMonth, $endOftheSecondToLastMonth, $household_id);
 				if (scoreLastMonth > scoreSecondToLastMonth){
-					achievementAchieved($dbh, 2, $household_id);
+					achievementAchieved($dbh, $id, $household_id);
 					echo json_encode("2");
 				}
 				echo json_encode("2");
