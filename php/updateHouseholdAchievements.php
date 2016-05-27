@@ -53,16 +53,8 @@
 			$RetrieveHouseholdJoined->execute();
 			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
-			echo json_encode($householdNotAchievedArray);
-			$householdJoined = $householdJoined[0]["joined"];
-			echo json_encode($householdJoined);
-			$a = date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month "));
-			echo json_encode($a);
-			$b = date("Y-m-d");
-			echo json_encode($b);
-			
+			//MySQL and DBO for updating achieved achievemets
 			$achievement_ID = null;
-			
 			$sqlUpdateHouseholdAchievements = "
 				UPDATE household_achievements
 				SET date_achieved = CURDATE(), achieved = 1	
@@ -72,6 +64,16 @@
 			$UpdateHouseholdAchievements = $dbh->prepare($sqlUpdateHouseholdAchievements);
 			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievement_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievements->bindParam(":household_id", $household_id, PDO::PARAM_INT);
+			
+			
+						
+			echo json_encode($householdNotAchievedArray);
+			$householdJoined = $householdJoined[0]["joined"];
+			echo json_encode($householdJoined);
+			$a = strtotime(date("Y-m-d", $householdJoined) . " + 1 month ");
+			echo json_encode($a);
+			$b = date("Y-m-d");
+			echo json_encode($b);
 			
 			
 			if(in_array("1", $householdNotAchievedArray)){
@@ -84,7 +86,8 @@
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
 			if(in_array($id = "1", $householdNotAchievedArray) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month ")) < date("Y-m-d")){
-				achievementAchieved ($dbh , $id, $household_id);
+				$achievement_ID = 1;
+				$UpdateHouseholdAchievements->execute();
 				echo json_encode("1");
 			}
 			
@@ -95,7 +98,8 @@
 				$scoreLastMonth =& getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth, $household_id);
 				$scoreSecondToLastMonth =& getScoreBetweenDates ($dbh, $startOfSecondToLastMonth, $endOftheSecondToLastMonth, $household_id);
 				if (scoreLastMonth > scoreSecondToLastMonth){
-					achievementAchieved($dbh, $id, $household_id);
+					$achievement_ID = 2;
+					$UpdateHouseholdAchievements->execute();
 					echo json_encode("2");
 				}
 				echo json_encode("2");
@@ -103,7 +107,8 @@
 			
 			// Quarterly Report. Checks if the user has been apart of the program for one quarter
 			if(in_array($id = 3, $householdNotAchievedArray) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 3 month ")) < date("Y-m-d")){
-				achievementAchieved ($dbh , $id, $household_id);
+				$achievement_ID = 3;
+				$UpdateHouseholdAchievements->execute();
 				echo json_encode("3");
 			}
 			
@@ -115,7 +120,8 @@
 				$scoreLastQuarter =& getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastQuarter, $household_id);
 				$scoreSecondToLastQuarter=& getScoreBetweenDates ($dbh, $startOfSecondToLastQuarter, $endOftheSecondToLastQuarter, $household_id);
 				if (scoreLastQuarter > scoreSecondToLastQuarter){
-					achievementAchieved($dbh, $id, $household_id);
+					$achievement_ID = 4;
+					$UpdateHouseholdAchievements->execute();
 					echo json_encode("4");
 				}
 				echo json_encode("4");
@@ -123,7 +129,8 @@
 			
 			//Yearly Report. Checks if the user has been in the program for 1 year
 			if(in_array($id = 5, $householdNotAchievedArray) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 year")) < date("Y-m-d")){
-				achievementAchieved ($dbh , $id, $household_id);
+				$achievement_ID = 5;
+				$UpdateHouseholdAchievements->execute();
 				echo json_encode("5");
 			}
 			
@@ -135,7 +142,8 @@
 				$scoreLastYear =& getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastYear, $household_id);
 				$scoreSecondToLastYear =& getScoreBetweenDates ($dbh, $startOfSecondToLastYear, $endOftheSecondToLastYear, $household_id);
 				if (scoreLastYear > scoreSecondToLastYear){
-					achievementAchieved($dbh, $id, $household_id);
+					$achievement_ID = 6;
+					$UpdateHouseholdAchievements->execute();
 					echo json_encode("6");
 				}
 				echo json_encode("6");
@@ -143,13 +151,15 @@
 			
 			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
 			if(in_array($id = 7, $householdNotAchievedArray) && getTotalscore($dbh, $household_id) >= 50){
-				achievementAchieved ($dbh , $id, $household_id);
+				$achievement_ID = 7;
+				$UpdateHouseholdAchievements->execute();
 				echo json_encode("7");
 			}
 			
 			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
 			if(in_array($id = 8, $householdNotAchievedArray) && getTotalscore($dbh, $household_id) >= 10000){
-				achievementAchieved ($dbh , $id, $household_id);
+				$achievement_ID = 8;
+				$UpdateHouseholdAchievements->execute();
 				echo json_encode("8");
 			}
 			
@@ -165,10 +175,6 @@
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
 	}	
 
-//MySQL and DBO for updating achieved achievemets
-function achievementAchieved ($achievement_ID, $household_ID){
-
-}
 
 //MySQL and DBO for getting score between two set dates
 function getScoreBetweenDates ($PDO, $startDate, $endDate, $household_ID){
