@@ -42,7 +42,7 @@
 			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
 			echo json_encode($householdNotAchieved);
-			$householdNotAchieved = $householdNotAchieved[0]["joined"];
+			$householdNotAchieved = $householdNotAchieved[0];
 			echo json_encode($householdNotAchieved);
 			$householdJoined = $householdJoined[0]["joined"];
 			echo json_encode($householdJoined);
