@@ -65,30 +65,56 @@
 			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievement_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievements->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			
-			
+			//MySQL and DBO for getting score between two set dates
+			$startDate = null;
+			$endDate = null;
+			$sqlRetrieveMonthScore = "
+						SELECT SUM(HS.value) as score
+						FROM household as HH
+						INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
+						WHERE NOT HS.score_type_score_type_id = 0
+						AND household_household_id = :household_id						
+						AND HS.date BETWEEN :startDate AND :endDate
+					";
+			$retrieveMonthScore = $dbh->prepare($sqlRetrieveMonthScore);
+			$retrieveMonthScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
+			$retrieveMonthScore->bindParam(":endDate",  $endDate, PDO::PARAM_STR);
+			$retrieveMonthScore->bindParam(":household_id", $household_ID, PDO::PARAM_INT);			
 						
-			echo json_encode($householdNotAchievedArray);
+			/*echo json_encode($householdNotAchievedArray);
 			$householdJoined = $householdJoined[0]["joined"];
 			echo json_encode($householdJoined);
 			$a = date("Y-m-d", strtotime(" + 1 month ", strtotime($householdJoined )));
 			echo json_encode($a);
 			$b = date("Y-m-d");
-			echo json_encode($b);			
+			echo json_encode($b);*/			
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
 			if(in_array($id = "1", $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 1 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				$achievement_ID = 1;
 				$UpdateHouseholdAchievements->execute();
-				echo json_encode("1");
 			}
 			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
 			if (in_array($id ="2", $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 2 month ", strtotime($householdJoined ))) < date("Y-m-d")){
-				$startOfSecondToLastMonth = date("Y-m-d", strtotime($startOfLastMonth."-1 month"));	
-				$endOftheSecondToLastMonth = date("Y-m-t", strtotime($startOfSecondToLastMonth));	
-				$scoreLastMonth =& getScoreBetweenDates($dbh, $startOfLastMonth, $endOftheLastMonth, $household_id);
-				$scoreSecondToLastMonth =& getScoreBetweenDates ($dbh, $startOfSecondToLastMonth, $endOftheSecondToLastMonth, $household_id);
-				if (scoreLastMonth > scoreSecondToLastMonth){
+				
+				echo json_encode("Hei");			
+				$startDate = startOfLastMonth;
+				$endDate = $endOftheLastMonth;
+				echo json_encode($startDate);
+				echo json_encode($endDate);
+				$retrieveMonthScore->execute();
+				$score1 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
+				
+				echo json_encode("Hei2");			
+				$startDate = date("Y-m-d", strtotime("-1 month", strtotime($startOfLastMonth)));
+				$endDate = date("Y-m-t", strtotime($startOfSecondToLastMonth));
+				echo json_encode($startDate);
+				echo json_encode($endDate);
+				$retrieveMonthScore->execute();
+				$score2 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
+				
+				if (score1> score2){
 					$achievement_ID = 2;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("2");
