@@ -1,4 +1,8 @@
 <?php
+
+class updateHouseholdAchievements{
+	
+
 	//Fetches connection information from the config.ini file then sets the connection variables
 	$iniArray = parse_ini_file("/var/www/html/config.ini", true);
 	$hostname = $iniArray["connectionInfo"]["hostname"];
@@ -59,11 +63,24 @@
 			echo json_encode($a);
 			$b = date("Y-m-d");
 			echo json_encode($b);
-
+			
+			$achievment_ID = null;
+			
+			$sqlUpdateHouseholdAchievements = "
+				UPDATE household_achievements
+				SET date_achieved = CURDATE(), achieved = 1	
+				WHERE household_household_id = :household_id
+				AND achievement_achievement_id = :achievement_id
+			";
+			$UpdateHouseholdAchievements = $dbh->prepare($sqlUpdateHouseholdAchievements);
+			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
+			$UpdateHouseholdAchievements->bindParam(":household_id", $household_ID, PDO::PARAM_INT);
+			
+			
 			if(in_array("1", $householdNotAchievedArray)){
 				echo json_encode("hei");
-				$id = 1;
-				achievementAchieved ($id, $household_id);
+				$achievment_ID = 1;
+				$UpdateHouseholdAchievements->execute();
 				echo json_encode("hade");
 			}
 			
@@ -154,16 +171,7 @@
 //MySQL and DBO for updating achieved achievemets
 function achievementAchieved ($achievement_ID, $household_ID){
 		global $dbh;
-		$sqlUpdateHouseholdAchievements = "
-				UPDATE household_achievements
-				SET date_achieved = CURDATE(), achieved = 1	
-				WHERE household_household_id = :household_id
-				AND achievement_achievement_id = :achievement_id
-			";
-			$UpdateHouseholdAchievements = $dbh->prepare($sqlUpdateHouseholdAchievements);
-			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
-			$UpdateHouseholdAchievements->bindParam(":household_id", $household_ID, PDO::PARAM_INT);
-			$UpdateHouseholdAchievements->execute();
+
 }
 
 //MySQL and DBO for getting score between two set dates
@@ -199,5 +207,5 @@ function getTotalscore($PDO, $household_ID){
 			$householdTotalScore = $RetrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
 			return $householdTotalScore;
 }
-	
+}	
 ?>
