@@ -58,7 +58,7 @@
 			$b = date("Y-m-d");
 			echo json_encode($b);
 
-			if(in_arry($id = "1", $householdNotAchievedArray)){
+			if(in_arry("1", $householdNotAchievedArray)){
 				echo json_encode("1");
 			}
 			
