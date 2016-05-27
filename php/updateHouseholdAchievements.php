@@ -113,8 +113,8 @@
 				echo json_encode($endDate);
 				$retrieveMonthScore->execute();
 				$score2 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
-				echo $score1;
-				echo $score2;
+				echo json_encode($score1);
+				echo json_encode($score2);
 				
 				if (score1> score2){
 					$achievement_ID = 2;
