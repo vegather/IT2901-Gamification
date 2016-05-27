@@ -59,7 +59,7 @@
 			echo json_encode($b);
 
 			if(in_array("1", $householdNotAchievedArray)){
-				achievementAchieved ($dbh , $id, $household_id);
+				achievementAchieved ($dbh , 1, $household_id);
 				echo json_encode("1");
 			}
 			
