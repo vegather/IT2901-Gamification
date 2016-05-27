@@ -98,12 +98,12 @@
 			}
 			
 			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if(in_arry($id = 7, $householdNotAchieved) && getTotalscore($dbh) >= 5000){
+			if(in_arry($id = 7, $householdNotAchieved) && getTotalscore($dbh, $household_id) >= 50){
 				achievementAchieved ($dbh , $id, $household_id);
 			}
 			
 			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if(in_arry($id = 8, $householdNotAchieved) && getTotalscore($dbh) >= 10000){
+			if(in_arry($id = 8, $householdNotAchieved) && getTotalscore($dbh, $household_id) >= 10000){
 				achievementAchieved ($dbh , $id, $household_id);
 			}
 			
