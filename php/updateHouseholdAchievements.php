@@ -42,10 +42,9 @@
 			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
 			echo json_encode($householdJoined);
-			$householdJoined = $householdJoined[0];
+			$householdJoined = $householdJoined[0]["joined"];
 			echo json_encode($householdJoined);
-			$householdJoined = $householdJoined[0];
-			echo json_encode($householdJoined);
+
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
 			if(in_arry($id = 1, $householdNotAchieved) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month ")) < date("Y-m-d")){
