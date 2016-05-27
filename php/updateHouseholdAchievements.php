@@ -5,6 +5,24 @@
 	$username = $iniArray["connectionInfo"]["username"];
 	$password = $iniArray["connectionInfo"]["password"];
 	$database = $iniArray["connectionInfo"]["database"];
+	
+	
+	//MySQL and DBO for updating achieved achievemets
+	function achievementAchieved ($PDO , $achievement_ID, $household_ID){
+		$sqlUpdateHouseholdAchievements = "
+			UPDATE household_achievements
+			SET date_achieved = CURDATE(), achieved = 1	
+			WHERE household_household_id = :household_id
+			AND achievement_achievement_id = :achievement_id
+		";
+		$UpdateHouseholdAchievements = $PDO->prepare($sqlUpdateHouseholdAchievements);
+		$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
+		$UpdateHouseholdAchievements->bindParam(":household_id", $household_ID, PDO::PARAM_INT);
+		$UpdateHouseholdAchievemnts->execute();
+}
+
+	
+	
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
@@ -148,20 +166,6 @@
 	} catch(PDOException $e) {
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
 	}	
-
-//MySQL and DBO for updating achieved achievemets
-function achievementAchieved ($PDO , $achievement_ID, $household_ID){
-		$sqlUpdateHouseholdAchievements = "
-				UPDATE household_achievements
-				SET date_achieved = CURDATE(), achieved = 1	
-				WHERE household_household_id = :household_id
-				AND achievement_achievement_id = :achievement_id
-			";
-			$UpdateHouseholdAchievements = $PDO->prepare($sqlUpdateHouseholdAchievements);
-			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
-			$UpdateHouseholdAchievements->bindParam(":household_id", $household_ID, PDO::PARAM_INT);
-			$UpdateHouseholdAchievemnts->execute();
-}
 
 //MySQL and DBO for getting score between two set dates
 function getScoreBetweenDates ($PDO, $startDate, $endDate, $household_ID){
