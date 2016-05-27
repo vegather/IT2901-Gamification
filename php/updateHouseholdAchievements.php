@@ -26,6 +26,7 @@
 				AND HA.achieved = 0
 			";
 			$RetrieveHouseholdNotAchievedAchievements = $dbh->prepare($sqlRetrieveHouseholdNotAchievedAchievements);
+			$RetrieveHouseholdNotAchievedAchievements->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$RetrieveHouseholdNotAchievedAchievements->execute();
 			$householdNotAchieved = $RetrieveHouseholdNotAchievedAchievements->fetchAll(PDO::FETCH_NUM);
 			
@@ -36,13 +37,14 @@
 			WHERE household_household_id = :household_id
 			";
 			$RetrieveHouseholdJoined = $dbh->prepare($sqlRetrieveHouseholdJoined);
+			$RetrieveHouseholdJoined->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$RetrieveHouseholdJoined->execute();
 			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
+			echo json_encode($householdJoined);
 			$householdJoined = $householdJoined[0];
+			echo json_encode($householdJoined);
 			$householdJoined = $householdJoined[0];
-			
-			
 			echo json_encode($householdJoined);
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
