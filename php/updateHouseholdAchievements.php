@@ -73,16 +73,7 @@
 			$a = date("Y-m-d", strtotime(" + 1 month ", strtotime($householdJoined )));
 			echo json_encode($a);
 			$b = date("Y-m-d");
-			echo json_encode($b);
-			
-			
-			if(in_array("1", $householdNotAchievedArray)){
-				echo json_encode("hei");
-				$achievement_ID = 1;
-				$UpdateHouseholdAchievements->execute();
-				echo json_encode("hade");
-			}
-			
+			echo json_encode($b);			
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
 			if(in_array($id = "1", $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 1 month ", strtotime($householdJoined ))) < date("Y-m-d")){
