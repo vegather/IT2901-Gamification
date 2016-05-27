@@ -113,13 +113,14 @@
 				echo json_encode($endDate);
 				$retrieveMonthScore->execute();
 				$score2 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
+				echo $score1;
+				echo $score2;
 				
 				if (score1> score2){
 					$achievement_ID = 2;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("2");
 				}
-				echo json_encode("2");
 			}
 			
 			// Quarterly Report. Checks if the user has been apart of the program for one quarter
