@@ -70,7 +70,7 @@
 			echo json_encode($householdNotAchievedArray);
 			$householdJoined = $householdJoined[0]["joined"];
 			echo json_encode($householdJoined);
-			$a = strtotime(date("Y-m-d", $householdJoined) . " + 1 month ");
+			$a = date("Y-m-d", strtotime(" + 1 month ", $householdJoined ));
 			echo json_encode($a);
 			$b = date("Y-m-d");
 			echo json_encode($b);
