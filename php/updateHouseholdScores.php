@@ -90,8 +90,8 @@
 				$scoreType = $value;
 				if ($scoreType == 0) {
 					$startDate = "2010-01-01";
-					$checkHouseholdScoreExist->execute();
-					$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+					$checkIfHouseholdScoreExist->execute();
+					$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
 					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
@@ -99,8 +99,8 @@
 					$updateHouseholdScore->execute();
 				} else {
 					$startDate = $startOfMonth;
-					$checkHouseholdScorExist->execute();
-					$householdScoreExist = $checkHouseholdScoreExist->fetchAll();
+					$checkIfHouseholdScoreExist->execute();
+					$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
 					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
@@ -135,6 +135,7 @@
 			$updateHouseholdRank = $dbh->prepare($sqlUpdateHouseholdRank);
 			$updateHouseholdRank->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$updateHouseholdRank->execute();
+			echo "Success!"
 		} else {
 			echo "household_id must be set in order to update scores for the household!";
 		}
