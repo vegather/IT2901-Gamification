@@ -9,6 +9,7 @@
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
+		global $dbh;
 		
 		//Check if household_id has been set as a parameter
 		if (isset($_GET["household_id"])) {
@@ -62,7 +63,7 @@
 			if(in_array("1", $householdNotAchievedArray)){
 				echo json_encode("hei");
 				$id = 1;
-				achievementAchieved ($dbh , $id, $household_id);
+				achievementAchieved ($id, $household_id);
 				echo json_encode("hade");
 			}
 			
@@ -151,14 +152,15 @@
 	}	
 
 //MySQL and DBO for updating achieved achievemets
-function achievementAchieved ($PDO , $achievement_ID, $household_ID){
+function achievementAchieved ($achievement_ID, $household_ID){
+		global $dbh;
 		$sqlUpdateHouseholdAchievements = "
 				UPDATE household_achievements
 				SET date_achieved = CURDATE(), achieved = 1	
 				WHERE household_household_id = :household_id
 				AND achievement_achievement_id = :achievement_id
 			";
-			$UpdateHouseholdAchievements = $PDO->prepare($sqlUpdateHouseholdAchievements);
+			$UpdateHouseholdAchievements = $dbh->prepare($sqlUpdateHouseholdAchievements);
 			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievements->bindParam(":household_id", $household_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievements->execute();
