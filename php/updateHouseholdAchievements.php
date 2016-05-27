@@ -61,7 +61,7 @@
 			$b = date("Y-m-d");
 			echo json_encode($b);
 			
-			$achievment_ID = null;
+			$achievement_ID = null;
 			
 			$sqlUpdateHouseholdAchievements = "
 				UPDATE household_achievements
@@ -70,13 +70,13 @@
 				AND achievement_achievement_id = :achievement_id
 			";
 			$UpdateHouseholdAchievements = $dbh->prepare($sqlUpdateHouseholdAchievements);
-			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievment_ID, PDO::PARAM_INT);
-			$UpdateHouseholdAchievements->bindParam(":household_id", $household_ID, PDO::PARAM_INT);
+			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievement_ID, PDO::PARAM_INT);
+			$UpdateHouseholdAchievements->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			
 			
 			if(in_array("1", $householdNotAchievedArray)){
 				echo json_encode("hei");
-				$achievment_ID = 1;
+				$achievement_ID = 1;
 				$UpdateHouseholdAchievements->execute();
 				echo json_encode("hade");
 			}
