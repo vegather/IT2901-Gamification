@@ -108,7 +108,7 @@
 				
 				echo json_encode("Hei2");			
 				$startDate = date("Y-m-d", strtotime("-1 month", strtotime($startOfLastMonth)));
-				$endDate = date("Y-m-t", strtotime($startOfSecondToLastMonth));
+				$endDate = date("Y-m-t", strtotime($startDate));
 				echo json_encode($startDate);
 				echo json_encode($endDate);
 				$retrieveMonthScore->execute();
