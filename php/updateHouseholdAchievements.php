@@ -55,6 +55,8 @@
 			echo json_encode($householdJoined);
 			$a = date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month "));
 			echo json_encode($a);
+			$b = date("Y-m-d");
+			echo json_encode($b);
 
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
