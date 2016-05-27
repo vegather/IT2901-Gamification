@@ -70,8 +70,7 @@
 			$endDate = null;
 			$sqlRetrieveMonthScore = "
 						SELECT SUM(HS.value) as score
-						FROM household as HH
-						INNER JOIN household_scores AS HS ON HH.household_id = HS.household_household_id
+						FROM household_scores as HS
 						WHERE NOT HS.score_type_score_type_id = 0
 						AND household_household_id = :household_id						
 						AND HS.date BETWEEN :startDate AND :endDate
@@ -79,8 +78,8 @@
 			$retrieveMonthScore = $dbh->prepare($sqlRetrieveMonthScore);
 			$retrieveMonthScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
 			$retrieveMonthScore->bindParam(":endDate",  $endDate, PDO::PARAM_STR);
-			$retrieveMonthScore->bindParam(":household_id", $household_ID, PDO::PARAM_INT);			
-						
+			$retrieveMonthScore->bindParam(":household_id", $household_id, PDO::PARAM_INT);
+			
 			/*echo json_encode($householdNotAchievedArray);
 			$householdJoined = $householdJoined[0]["joined"];
 			echo json_encode($householdJoined);
