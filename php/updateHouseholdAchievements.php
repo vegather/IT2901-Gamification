@@ -34,7 +34,7 @@
 			$sqlRetrieveHouseholdJoined = "
 			SELECT joined
 			FROM household
-			WHERE household_household_id = :household_id
+			WHERE household_id = :household_id
 			";
 			$RetrieveHouseholdJoined = $dbh->prepare($sqlRetrieveHouseholdJoined);
 			$RetrieveHouseholdJoined->bindParam(":household_id", $household_id, PDO::PARAM_INT);
