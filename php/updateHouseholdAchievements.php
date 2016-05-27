@@ -30,6 +30,15 @@
 			$RetrieveHouseholdNotAchievedAchievements->execute();
 			$householdNotAchieved = $RetrieveHouseholdNotAchievedAchievements->fetchAll(PDO::FETCH_NUM);
 			
+			$householdNotAchievedArray = array();
+			
+			foreach($householdNotAchieved as &$value3) {
+				foreach($value3 as $value4) {
+					$householdNotAchievedArray[]= $value4;
+				}
+			}
+			
+			
 			//MySQL for retrieving the date the household joined
 			$sqlRetrieveHouseholdJoined = "
 			SELECT joined
@@ -42,8 +51,7 @@
 			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
 			echo json_encode($householdNotAchieved);
-			$householdNotAchieved = $householdNotAchieved[0];
-			echo json_encode($householdNotAchieved);
+			echo json_encode($householdNotAchievedArray);
 			$householdJoined = $householdJoined[0]["joined"];
 			echo json_encode($householdJoined);
 			
