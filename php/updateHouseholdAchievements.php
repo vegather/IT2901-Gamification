@@ -59,17 +59,17 @@
 			echo json_encode($b);
 
 			if(in_array("1", $householdNotAchievedArray)){
+				echo json_encode("hei");
 				$id = 1;
 				achievementAchieved ($dbh , $id, $household_id);
-				echo json_encode("1");
+				echo json_encode("hade");
 			}
 			
 			
 			// Monthly Report. Checks if the user has been apart of the program for one month
 			if(in_array($id = "1", $householdNotAchievedArray) && date('Y-m-d',strtotime(date("Y-m-d", $householdJoined) . " + 1 month ")) < date("Y-m-d")){
-				echo json_encode("hei");
 				achievementAchieved ($dbh , $id, $household_id);
-				echo json_encode("hade");
+				echo json_encode("1");
 			}
 			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
