@@ -1,6 +1,4 @@
 <?php
-
-class updateHouseholdAchievements{
 	
 
 	//Fetches connection information from the config.ini file then sets the connection variables
@@ -13,7 +11,6 @@ class updateHouseholdAchievements{
 	//Connection to the database
 	try {
 		$dbh = new PDO('mysql:host='.$hostname.';dbname='.$database, $username, $password);
-		global $dbh;
 		
 		//Check if household_id has been set as a parameter
 		if (isset($_GET["household_id"])) {
@@ -170,7 +167,6 @@ class updateHouseholdAchievements{
 
 //MySQL and DBO for updating achieved achievemets
 function achievementAchieved ($achievement_ID, $household_ID){
-		global $dbh;
 
 }
 
@@ -206,6 +202,5 @@ function getTotalscore($PDO, $household_ID){
 			$RetrieveHouseholdTotalScore->execute();
 			$householdTotalScore = $RetrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
 			return $householdTotalScore;
-}
 }	
 ?>
