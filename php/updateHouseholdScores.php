@@ -143,7 +143,7 @@
 			$updateHouseholdRank->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$updateHouseholdRank->bindParam(":endDate", $endDate, PDO::PARAM_STR);
 			$updateHouseholdRank->execute();
-			echo "Success!"
+			echo "Success!";
 		} else {
 			echo "household_id must be set in order to update scores for the household!";
 		}
