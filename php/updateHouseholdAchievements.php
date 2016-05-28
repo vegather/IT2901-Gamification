@@ -121,7 +121,7 @@
 			if(in_array($id = 4, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 7 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				
 				//Retrieves the score from last quarter
-				$startDate = date("Y-m-d", strtotime("-2 month", strtotime($startOfLastMonth.)));
+				$startDate = date("Y-m-d", strtotime("-2 month", strtotime($startOfLastMonth)));
 				$endDate =  $endoftheLastMonth;
 				$retrieveMonthScore->execute();
 				$score1 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
