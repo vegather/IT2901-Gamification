@@ -182,10 +182,10 @@
 			}
 			
 			echo json_encode($totalScore);
-			echo json_encode($totalScore[0][score]);
+			echo json_encode($totalScore[0][value]);
 			
 			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if(in_array($id = 7, $householdNotAchievedArray) && $totalScore[0][score] >= 50){
+			if(in_array($id = 7, $householdNotAchievedArray) && $totalScore[0][value] >= 50){
 				$achievement_ID = 7;
 				$UpdateHouseholdAchievements->execute();
 				echo json_encode("Achieved achievement 7");
