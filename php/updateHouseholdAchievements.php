@@ -65,7 +65,7 @@
 			$UpdateHouseholdAchievements->bindParam(":achievement_id", $achievement_ID, PDO::PARAM_INT);
 			$UpdateHouseholdAchievements->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			
-			//MySQL and DBO for getting score between two set dates
+			//MySQL and DBO for retrieving score between two set dates
 			$startDate = null;
 			$endDate = null;
 			$sqlRetrieveMonthScore = "
