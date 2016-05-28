@@ -115,7 +115,7 @@
 				echo json_encode((int)$score1[0]["score"]);
 				echo json_encode((int)$score2[0]["score"]);
 				
-				if (score1> score2){
+				if (((int)$score1[0]["score"])> ((int)$score2[0]["score"])){
 					$achievement_ID = 2;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("2");
