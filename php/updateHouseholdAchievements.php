@@ -123,15 +123,12 @@
 					echo json_encode("2");
 				}
 			}
-			
-			echo json_encode($householdJoined);
-			$a = date("Y-m-d", strtotime(" + 3 month ", strtotime($householdJoined )));
-			echo json_encode($a);
+
 			
 			// Quarterly Report. Checks if the user has been apart of the program for one quarter
 			if(in_array($id = 3, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 3 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				$achievement_ID = 3;
-				//$UpdateHouseholdAchievements->execute();
+				$UpdateHouseholdAchievements->execute();
 				echo json_encode("3");
 			}
 			
