@@ -93,7 +93,6 @@
 				$achievement_ID = 1;
 				$UpdateHouseholdAchievements->execute();
 			}
-			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
 			if (in_array($id ="2", $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 2 month ", strtotime($householdJoined ))) < date("Y-m-d")){
@@ -116,13 +115,13 @@
 				echo json_encode($score1);
 				echo json_encode($score2);
 				
-				if (score1> score2){
+				if (score1[0]> score2[0]){
 					$achievement_ID = 2;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("2");
 				}
 			}
-			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
+			
 			echo json_encode($householdJoined);
 			$a = date("Y-m-d", strtotime(" + 3 month ", strtotime($householdJoined )));
 			echo json_encode($a);
@@ -133,7 +132,6 @@
 				//$UpdateHouseholdAchievements->execute();
 				echo json_encode("3");
 			}
-			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
 			// Quarterly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 quarters and if the user has the requirements to achieve it
 			if(in_array($id = 4, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 7 month ", strtotime($householdJoined ))) < date("Y-m-d")){
@@ -149,7 +147,6 @@
 				}
 				echo json_encode("4");
 			}
-			$householdJoined = $RetrieveHouseholdJoined->fetchAll(PDO::FETCH_ASSOC);
 			
 			//Yearly Report. Checks if the user has been in the program for 1 year
 			if(in_array($id = 5, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 12 month ", strtotime($householdJoined ))) < date("Y-m-d")){
