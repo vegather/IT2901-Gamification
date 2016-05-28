@@ -181,18 +181,15 @@
 				}
 			}
 			
-			echo json_encode($totalScore);
-			echo json_encode($totalScore[0][value]);
-			
 			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if(in_array($id = 7, $householdNotAchievedArray) && $totalScore[0][value] >= 50){
+			if(in_array($id = 7, $householdNotAchievedArray) && $totalScore[0][value] >= 5000){
 				$achievement_ID = 7;
 				$UpdateHouseholdAchievements->execute();
 				echo json_encode("Achieved achievement 7");
 			}
 			
 			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
-			if(in_array($id = 8, $householdNotAchievedArray) && getTotalscore($dbh, $household_id) >= 10000){
+			if(in_array($id = 8, $householdNotAchievedArray) && $totalScore[0][value] >= 10000){
 				$achievement_ID = 8;
 				$UpdateHouseholdAchievements->execute();
 				echo json_encode("Achieved achievement 8");
