@@ -120,6 +120,8 @@
 			// Quarterly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 quarters and if the user has the requirements to achieve it
 			if(in_array($id = 4, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 7 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				
+				
+				echo json_encode($endOftheLastMonth);
 				//Retrieves the score from last quarter
 				$startDate = date("Y-m-d", strtotime("-2 month", strtotime($startOfLastMonth)));
 				$endDate =  $endoftheLastMonth;
@@ -137,11 +139,11 @@
 				echo json_encode($startDate);
 				echo json_encode($endDate);
 				
-				/*if (score1> score2){
+				if (score1> score2){
 					$achievement_ID = 4;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("4");
-				}*/
+				}
 				echo json_encode("4");
 			}
 			
