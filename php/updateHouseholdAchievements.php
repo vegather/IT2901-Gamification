@@ -122,7 +122,7 @@
 				
 				//Retrieves the score from last quarter
 				$startDate = date("Y-m-d", strtotime("-2 month", strtotime($startOfLastMonth)));
-				$endDate =  $endoftheLastMonth;
+				$endDate =  $endOftheLastMonth;
 				$retrieveMonthScore->execute();
 				$score1 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
 				echo json_encode($startDate);
@@ -137,11 +137,11 @@
 				echo json_encode($startDate);
 				echo json_encode($endDate);
 				
-				/*if (score1> score2){
+				if (((int)$score1[0]["score"])> ((int)$score2[0]["score"])){
 					$achievement_ID = 4;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("4");
-				}*/
+				}
 				echo json_encode("4");
 			}
 			
