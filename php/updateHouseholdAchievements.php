@@ -97,7 +97,9 @@
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
 			if (in_array($id ="2", $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 2 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				
-				echo json_encode("Hei");			
+				//echo json_encode("Hei");
+				$a = date("Y-m-d", strtotime(" + 2 month ", strtotime($householdJoined )));
+				echo json_encode($a);
 				$startDate = $startOfLastMonth;
 				$endDate = $endOftheLastMonth;
 				echo json_encode($startDate);
