@@ -205,20 +205,5 @@
 		
 	} catch(PDOException $e) {
 		echo '<h1>An error has occured.</h1><pre>', $e->getMessage(), '</pre>';
-	}	
-
-//MySQL and DBO for retrieving totalscore for the household
-function getTotalscore($PDO, $household_ID){
-			$sqlRetrieveHouseholdTotalScore = "
-					SELECT value
-					FROM household_scores
-					WHERE score_type_score_type_id = 0
-					AND household_household_id = :household_id
-				";
-			$RetrieveHouseholdTotalScore = $dbh->prepare($sqlRetrieveHouseholdTotalScore);
-			$RetrieveHouseholdTotalScore->bindParam(":household_id", $household_ID, PDO::PARAM_INT);
-			$RetrieveHouseholdTotalScore->execute();
-			$householdTotalScore = $RetrieveHouseholdTotalScore->fetchAll(PDO::FETCH_ASSOC);
-			return $householdTotalScore;
-}	
+	}		
 ?>
