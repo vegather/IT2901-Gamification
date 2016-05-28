@@ -137,11 +137,11 @@
 				echo json_encode($startDate);
 				echo json_encode($endDate);
 				
-				if ((int)$score1[0]["score"])> ((int)$score2[0]["score"])){
+				/*if (score1> score2){
 					$achievement_ID = 4;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("4");
-				}
+				}*/
 				echo json_encode("4");
 			}
 			
