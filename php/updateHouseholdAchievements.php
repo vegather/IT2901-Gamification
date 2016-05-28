@@ -137,12 +137,13 @@
 				echo json_encode($startDate);
 				echo json_encode($endDate);
 				
+				echo json_encode($score1);
+				echo json_encode($score2);	
 				if (((int)$score1[0]["score"])> ((int)$score2[0]["score"])){
 					$achievement_ID = 4;
 					$UpdateHouseholdAchievements->execute();
 					echo json_encode("4");
 				}
-				echo json_encode("4");
 			}
 			
 			//Yearly Report. Checks if the user has been in the program for 1 year
