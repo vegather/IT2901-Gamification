@@ -84,6 +84,7 @@
 			if(in_array($id = "1", $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 1 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				$achievement_ID = 1;
 				$UpdateHouseholdAchievements->execute();
+				echo json_encode("Achieved achievemnt 1");
 			}
 			
 			// Monthly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 months and if the user has the requirements to achieve it
@@ -105,7 +106,7 @@
 				if (((int)$score1[0]["score"])> ((int)$score2[0]["score"])){
 					$achievement_ID = 2;
 					$UpdateHouseholdAchievements->execute();
-					echo json_encode("2");
+					echo json_encode("Achieved achievemnt 2");
 				}
 			}
 
@@ -114,7 +115,7 @@
 			if(in_array($id = 3, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 3 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				$achievement_ID = 3;
 				$UpdateHouseholdAchievements->execute();
-				echo json_encode("3");
+				echo json_encode("Achieved achievemnt 3");
 			}
 			
 			// Quarterly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 quarters and if the user has the requirements to achieve it
@@ -125,20 +126,13 @@
 				$endDate =  $endOftheLastMonth;
 				$retrieveMonthScore->execute();
 				$score1 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
-				echo json_encode($startDate);
-				echo json_encode($endDate);
-				
 				
 				//Retrieves the score from secons to last quarter
 				$startDate = date("Y-m-d", strtotime("-3 month", strtotime($startDate)));
 				$endDate = date("Y-m-t", strtotime("+2 month", strtotime($startDate)));
 				$retrieveMonthScore->execute();
 				$score2 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
-				echo json_encode($startDate);
-				echo json_encode($endDate);
-				
-				echo json_encode($score1);
-				echo json_encode($score2);	
+	
 				if (((int)$score1[0]["score"])> ((int)$score2[0]["score"])){
 					$achievement_ID = 4;
 					$UpdateHouseholdAchievements->execute();
@@ -150,36 +144,49 @@
 			if(in_array($id = 5, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 12 month ", strtotime($householdJoined ))) < date("Y-m-d")){
 				$achievement_ID = 5;
 				$UpdateHouseholdAchievements->execute();
-				echo json_encode("5");
+				echo json_encode("Achieved achievemnt 5");
 			}
 			
 			// Yearly Improver. Checks if the achievement is in the householdNotAchieved array, if the user has been a menber for more then 2 years and if the user has the requirements to achieve it
 			if(in_array($id = 6, $householdNotAchievedArray) && date("Y-m-d", strtotime(" + 25 month ", strtotime($householdJoined ))) < date("Y-m-d")){
-				$startOfLastYear = date("Y-m-d", strtotime($startOfLastMonth."-1 year"));				
-				$startOfSecondToLastYear = date("Y-m-d", strtotime($startOfLastYear."-1 year"));
-				$endOftheSecondToLastYear = date("Y-m-t", strtotime($startOfSecondToLastYear."-1 month"));
-				$scoreLastYear =& getScoreBetweenDates($dbh, $endOftheLastMonth, $startOfLastYear, $household_id);
-				$scoreSecondToLastYear =& getScoreBetweenDates ($dbh, $startOfSecondToLastYear, $endOftheSecondToLastYear, $household_id);
-				if (scoreLastYear > scoreSecondToLastYear){
+				
+				//Retrieves the score from last year
+				$startDate = date("Y-m-d", strtotime("-1 year", strtotime($startOfLastMonth)));
+				$endDate =  $endOftheLastMonth;
+				$retrieveMonthScore->execute();
+				$score1 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
+				echo json_encode($startDate);
+				echo json_encode($endDate);
+				echo json_encode($score1);
+				
+				//Retrieves the score from secons to last year
+				$startDate = date("Y-m-d", strtotime("-1 year", strtotime($startDate)));
+				$endDate = date("Y-m-t", strtotime("+11 month", strtotime($startDate)));
+				$retrieveMonthScore->execute();
+				$score2 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
+				echo json_encode($startDate);
+				echo json_encode($endDate);
+				echo json_encode($score2);
+				
+				if ((((int)$score1[0]["score"])> ((int)$score2[0]["score"]))){
 					$achievement_ID = 6;
 					$UpdateHouseholdAchievements->execute();
-					echo json_encode("6");
+					echo json_encode("Achieved achievemnt 6");
 				}
-				echo json_encode("6");
 			}
 			
 			//Big numbers. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
 			if(in_array($id = 7, $householdNotAchievedArray) && getTotalscore($dbh, $household_id) >= 50){
 				$achievement_ID = 7;
 				$UpdateHouseholdAchievements->execute();
-				echo json_encode("7");
+				echo json_encode("Achieved achievemnt 7");
 			}
 			
 			//Incredible Total. Checks if the achievement is in the householdNotAchieved array and if the user has the requirements to achieve it
 			if(in_array($id = 8, $householdNotAchievedArray) && getTotalscore($dbh, $household_id) >= 10000){
 				$achievement_ID = 8;
 				$UpdateHouseholdAchievements->execute();
-				echo json_encode("8");
+				echo json_encode("Achieved achievemnt 8");
 			}
 			
 			
