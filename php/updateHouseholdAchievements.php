@@ -152,7 +152,7 @@
 				
 				//Retrieves the score from last year
 				$startDate = date("Y-m-t", strtotime("-1 year", strtotime($startOfLastMonth)));
-				$endDate =  $startOfLastMonth;
+				$endDate =  date("Y-m-t", strtotime("+1 month", strtotime($startOfLastMonth)));
 				$retrieveMonthScore->execute();
 				$score1 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
 				echo json_encode($startDate);
@@ -161,7 +161,7 @@
 				
 				//Retrieves the score from secons to last year
 				$startDate = date("Y-m-d", strtotime("-1 year", strtotime($startDate)));
-				$endDate = date("Y-m-t", strtotime("+11 month", strtotime($startDate)));
+				$endDate = date("Y-m-t", strtotime("-1 year", strtotime($endDate)));
 				$retrieveMonthScore->execute();
 				$score2 = $retrieveMonthScore->fetchAll(PDO::FETCH_ASSOC);
 				echo json_encode($startDate);
