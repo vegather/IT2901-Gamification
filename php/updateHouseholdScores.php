@@ -21,8 +21,11 @@
 			$household_id = $_GET["household_id"];
 			$scoreType = null;
 			$score = null;
-			$startOfMonth = date("Y-m")."-01";
+			
+			$startOfLastMonth = date("Y-m-d", strtotime("first day of previous month"));
+			$endOfLastMonth = date("Y-m-d", strtotime("last day of previous month"));
 			$startDate = null;
+			$endDate = $endOfLastMonth;
 			
 			//The data on household throughput for the month
 			//TODO insert fetching method of data from clientside.
@@ -50,39 +53,41 @@
 			FROM household_scores AS HS
 			WHERE HS.household_household_id = :household_id
 			AND HS.score_type_score_type_id = :score_type_id
-			AND HS.date BETWEEN :startDate AND CURDATE()
+			AND HS.date BETWEEN :startDate AND :endDate
 			LIMIT 1
 			";
 			$checkIfHouseholdScoreExist = $dbh->prepare($sqlCheckIfHouseholdScoreExist);
 			$checkIfHouseholdScoreExist->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$checkIfHouseholdScoreExist->bindParam(":score_type_id", $scoreType, PDO::PARAM_INT);
 			$checkIfHouseholdScoreExist->bindParam(":startDate", $startDate, PDO::PARAM_STR);
+			$checkIfHouseholdScoreExist->bindParam(":endDate", $endDate, PDO::PARAM_STR);
 			
 			
 			//MySQL and DBO for inserting missing household score types for the household
 			$sqlInsertHouseholdScoreType = "
 			INSERT INTO household_scores(household_household_id, score_type_score_type_id, date, value)
-			VALUES (:household_id, :score_type_id, CURDATE(), 0)
+			VALUES (:household_id, :score_type_id, :endDate, 0)
 			";
 			$insertHouseholdScoreType = $dbh->prepare($sqlInsertHouseholdScoreType);
 			$insertHouseholdScoreType->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$insertHouseholdScoreType->bindParam(":score_type_id", $scoreType, PDO::PARAM_INT);
+			$insertHouseholdScoreType->bindParam(":endDate", $endDate, PDO::PARAM_STR);
 			
 			
 			//MySQL and DBO for updating scores for the household
 			$sqlUpdateHouseholdScore = "
 			UPDATE household_scores
-			SET date = CURDATE(),
-			value = value + :value
+			SET value = value + :value
 			WHERE household_household_id = :household_id
 			AND score_type_score_type_id = :score_type_id
-			AND date BETWEEN :startDate AND CURDATE()
+			AND date BETWEEN :startDate AND :endDate
 			";
 			$updateHouseholdScore = $dbh->prepare($sqlUpdateHouseholdScore);
 			$updateHouseholdScore->bindParam(":value", $score, PDO::PARAM_INT);
 			$updateHouseholdScore->bindParam(":household_id", $household_id, PDO::PARAM_INT);
 			$updateHouseholdScore->bindParam(":score_type_id", $scoreType, PDO::PARAM_INT);
 			$updateHouseholdScore->bindParam(":startDate", $startDate, PDO::PARAM_STR);
+			$updateHouseholdScore->bindParam(":endDate", $endDate, PDO::PARAM_STR);
 			
 			
 			//Iterate over different household score types and check if each exists. If they don't exist insert them into the table then update the score based on the values calculated.
@@ -92,15 +97,17 @@
 					$startDate = "2010-01-01";
 					$checkIfHouseholdScoreExist->execute();
 					$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
+					//NOTE: This conditional might not work depending on what results the above code fetches.
 					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
 					$score = $scores[$scoreType];
 					$updateHouseholdScore->execute();
 				} else {
-					$startDate = $startOfMonth;
+					$startDate = $startOfLastMonth;
 					$checkIfHouseholdScoreExist->execute();
 					$householdScoreExist = $checkIfHouseholdScoreExist->fetchAll();
+					//NOTE: This conditional might not work depending on what results the above code fetches.
 					if (count($householdScoreExist) < 1) {
 						$insertHouseholdScoreType->execute();
 					}
@@ -120,7 +127,7 @@
 			//Updates the households rank if they meet the criteria for the next rank, after having updated their scores.
 			$sqlUpdateHouseholdRank = "
 			UPDATE household_ranks as HR
-			SET HR.date_obtained = CURDATE()
+			SET HR.date_obtained = :endDate
 			WHERE HR.household_household_id = :household_id
 			AND HR.date_obtained IS NULL
 			AND HR.rank_rank_id = (SELECT R.rank_id
@@ -134,6 +141,7 @@
 			";
 			$updateHouseholdRank = $dbh->prepare($sqlUpdateHouseholdRank);
 			$updateHouseholdRank->bindParam(":household_id", $household_id, PDO::PARAM_INT);
+			$updateHouseholdRank->bindParam(":endDate", $endDate, PDO::PARAM_STR);
 			$updateHouseholdRank->execute();
 			echo "Success!"
 		} else {
